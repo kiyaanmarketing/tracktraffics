@@ -10,7 +10,7 @@
 
 
     function createTrackingPixel(url) {
-        console.log("13 =>  url", url);
+        
         var img = document.createElement('img');
         img.src = url;
         img.style.width = '1px';
@@ -50,7 +50,6 @@
                 createTrackingPixel(result.affiliate_url);
                 sessionStorage.setItem('iframe_triggered', 'true'); 
             } else {
-                console.log("53 else part => ", result)
                 createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
             }
         } catch (error) {
