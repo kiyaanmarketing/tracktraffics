@@ -17,28 +17,28 @@ app.use(corsMiddleware);
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post("/api/save-client-data", async (req, res) => {
-  const { clientId, referrer, utmSource, utmMedium, utmCampaign } = req.body;
+// app.post("/api/save-client-data", async (req, res) => {
+//   const { clientId, referrer, utmSource, utmMedium, utmCampaign } = req.body;
 
-  const params = {
-    TableName: "ClientData",
-    Item: {
-      clientId,
-      referrer,
-      utmSource,
-      utmMedium,
-      utmCampaign,
-    },
-  };
+//   const params = {
+//     TableName: "ClientData",
+//     Item: {
+//       clientId,
+//       referrer,
+//       utmSource,
+//       utmMedium,
+//       utmCampaign,
+//     },
+//   };
 
-  try {
-    await dynamoDb.send(new PutCommand(params));
-    res.status(200).json({ success: true });
-  } catch (error) {
-    console.error("Error saving data to DynamoDB:", error);
-    res.status(500).json({ success: false, error: "Failed to save data" });
-  }
-});
+//   try {
+//     await dynamoDb.send(new PutCommand(params));
+//     res.status(200).json({ success: true });
+//   } catch (error) {
+//     console.error("Error saving data to DynamoDB:", error);
+//     res.status(500).json({ success: false, error: "Failed to save data" });
+//   }
+// });
 
 app.get("/api/get-client-data", async (req, res) => {
   try {
@@ -83,11 +83,11 @@ const currentDateTime = getCurrentDateTime();
     return result.Items;
   } catch (err) {
     console.error('Error retrieving tracking All data:', err);
-    res.status(500).json({ error: 'Error retrieving tracking All data' });
+    //res.status(500).json({ error: 'Error retrieving tracking All data' });
   }
 };
 
-console.log("getAllHostName",getAllHostName('Tracking').then((result) => console.log("prom result=> ",result)))
+console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
 
 
 const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
