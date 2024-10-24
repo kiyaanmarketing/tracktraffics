@@ -40,19 +40,6 @@ app.use(cors());
 //   }
 // });
 
-app.get("/api/get-client-data", async (req, res) => {
-  try {
-    const params = {
-      TableName: "ClientData",
-    };
-    const data = await dynamoDb.send(new ScanCommand(params));
-    res.status(200).json(data.Items);
-  } catch (error) {
-    console.error("Error fetching data from DynamoDB:", error);
-    res.status(500).json({ success: false, error: "Failed to fetch data" });
-  }
-});
-
 
 
 function getCurrentDateTime() {
