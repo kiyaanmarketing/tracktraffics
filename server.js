@@ -74,7 +74,7 @@ const currentDateTime = getCurrentDateTime();
   }
 };
 
-console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
+//console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
 
 
 const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
@@ -90,11 +90,11 @@ const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
       return matchedEntry.affiliateUrl;
     } else {
       // If no match is found, return a default affiliate URL
-      return 'https://www.tracktraffics.com/';
+      return ' ';
     }
   } catch (error) { 
     console.error('Error finding affiliate URL:', error);
-    return 'https://www.tracktraffics.com/'; // Return default on error
+    return ' '; // Return default on error
   }
 };
 
