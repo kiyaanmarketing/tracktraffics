@@ -412,6 +412,26 @@ app.get('/aff_retag', async (req, res) => {
   
 });
 
+
+// Route to handle dynamic redirection based on the target URL parameter
+app.get('/redirect', (req, res) => {
+  // Extract the target URL from the query parameter
+  const targetUrl = req.query.url;
+  
+  // Check if the target URL is provided and is valid
+  if (targetUrl && /^https?:\/\/[^\s/$.?#].[^\s]*$/.test(targetUrl)) {
+    // Set Referrer-Policy header to no-referrer
+    res.set('Referrer-Policy', 'no-referrer');
+    
+    // Redirect to the target URL with a 302 status code
+    res.redirect(302, targetUrl);
+  } else {
+    // If target URL is not provided or invalid, send an error response
+    res.status(400).send('Invalid or missing target URL');
+  }
+});
+
+
 app.use(express.static(path.join(__dirname, "public")));
 
 
