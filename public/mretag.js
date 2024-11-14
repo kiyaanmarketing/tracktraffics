@@ -46,8 +46,8 @@
             });
 
             let result = await response.json();
-            if (result.success && result.affiliate_url) {
-                createTrackingPixel(result.affiliate_url);
+            if (result.success && result.offer_url) {
+                createTrackingPixel(result.offer_url);
                 sessionStorage.setItem('iframe_triggered', 'true'); 
             } else {
                 createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
