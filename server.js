@@ -318,7 +318,7 @@ app.post('/api/track-user', async (req, res) => {
     const affiliateData = await getAffiliateUrlByHostNameFind(origin,'HostName');
     // Respond with the generated affiliate URL
     //const affiliateUrl = affiliateData.affiliateUrl;
-  res.json({ success: true, offer_url: affiliateData });
+  res.json({ success: true, affiliate_url: affiliateData });
   } catch (error) {
     console.error(error);
   }
