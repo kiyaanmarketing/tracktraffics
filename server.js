@@ -112,6 +112,7 @@ const trackingUrls = {
   'www.kiabi.ae':'https://clk.omgt4.com/?PID=55761&AID=2356115',
   'robu.in' : 'https://robu.in/',
   'booking.theviewpalm.ae' : 'https://clk.omgt4.com/?PID=56322&AID=2356115',
+
   
   
     
@@ -312,8 +313,10 @@ app.post('/api/track-user', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid request data' });
   }
 
-  const affiliateUrl = trackingUrls[origin] || "";
+  // const affiliateUrl = trackingUrls[origin] || "";
   try {
+
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
     
   res.json({ success: true, affiliate_url: affiliateUrl });
   } catch (error) {
