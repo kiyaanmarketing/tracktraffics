@@ -412,6 +412,33 @@ app.get('/aff_retag', async (req, res) => {
   
 });
 
+// Route to handle tracker redirects dynamically
+app.get('/affid/:trackerId', async (req, res) => {
+  const trackerId = req.params.trackerId; 
+
+  try {
+    
+    const redirectUrl = await getAffiliateUrlByHostNameFind(trackerId,'Tracker');
+  
+    if (!redirectUrl) {
+     
+      return res.status(404).send('URL not found for the specified tracker');
+    }
+
+    res.set('Referrer-Policy', 'no-referrer');
+    
+    res.redirect(302, redirectUrl);
+  } catch (error) {
+    console.error('Error fetching data from DynamoDB:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+
+
+
 app.use(express.static(path.join(__dirname, "public")));
 
 
