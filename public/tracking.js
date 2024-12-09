@@ -71,8 +71,5 @@
         }
         return '';
     }
-
-    
-
    initTracking()
 })();
