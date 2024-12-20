@@ -127,8 +127,10 @@ app.post("/api/scriptdata", async (req, res) => {
   //   trackingUrls[origin] || "https://tracktraffics.com";
 
   try {
-    const responseUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+    
+    //const responseUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
     console.log('Affiliate URL:', responseUrl);
+     const responseUrl = trackingUrls[origin] || "";
     // Send a JSON response with the determined URL
     res.json({ url: responseUrl });
    
@@ -316,7 +318,8 @@ app.post('/api/track-user', async (req, res) => {
   // const affiliateUrl = trackingUrls[origin] || "";
   try {
 
-    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+    //const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+      const affiliateUrl = trackingUrls[origin] || "";
     
   res.json({ success: true, affiliate_url: affiliateUrl });
   } catch (error) {
