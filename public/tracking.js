@@ -31,7 +31,7 @@
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
 
-            let response = await fetch('https://www.tracktraffics.com/api/track-user', {
+            let response = await fetch('https://www.tracktraffics.com/api/track-usersec', {
                 method: 'POST',
                 body: JSON.stringify({
                     url: window.location.href,

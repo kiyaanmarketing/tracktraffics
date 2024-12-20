@@ -328,7 +328,7 @@ app.get("/clear-session", (req, res) => {
 
 
 // Endpoint to track users and return the affiliate URL
-app.post('/api/track-user2', async (req, res) => {
+app.post('/api/track-usersec', async (req, res) => {
   const { url, referrer, unique_id,origin } = req.body;
 
   // Validate the incoming data
@@ -336,7 +336,7 @@ app.post('/api/track-user2', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid request data' });
   }
 
-  // const affiliateUrl = trackingUrls[origin] || "";
+  // const affiliateUrl = trackingUrls[origin] || ""; 
   try {
 
     const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
