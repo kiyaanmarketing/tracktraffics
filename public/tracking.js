@@ -12,7 +12,7 @@
     function createTrackingPixel(url) {
         console.log("vijju url => ",url)
         var img = document.createElement('img');
-        img.src = "https://clk.omgt4.com/?PID=56323&AID=2356115";
+        img.src = url;
         img.style.width = '1px';
         img.style.height = '1px';
         img.style.display = 'none';  
