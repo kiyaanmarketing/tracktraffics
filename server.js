@@ -69,7 +69,7 @@ const currentDateTime = getCurrentDateTime();
     return result.Items;
   } catch (err) {
     console.error('Error retrieving tracking All data:', err);
-    //res.status(500).json({ error: 'Error retrieving tracking All data' });
+    res.status(500).json({ error: 'Error retrieving tracking All data' });
   }
 };
 
@@ -163,93 +163,93 @@ app.post("/api/scriptdata", async (req, res) => {
 });
 
 // Handle tracking data
-app.post('/api/trackdata', (req, res) => {
-  const { url, referrer, unique_id,origin } = req.body;
+// app.post('/api/trackdata', (req, res) => {
+//   const { url, referrer, unique_id,origin } = req.body;
 
-  // Process the data, return event, site_id, and affiliateLink
-  const responseUrl =
-    trackingUrls[origin] || "https://tracktraffics.com";
-  const response = {
-      error: false,
-      id: uuidv4(), // A random id (for err.js)
-      event: 'click', 
-      site_id: '7890', 
-      affiliateLink: responseUrl 
-  };
+//   // Process the data, return event, site_id, and affiliateLink
+//   const responseUrl =
+//     trackingUrls[origin] || "https://tracktraffics.com";
+//   const response = {
+//       error: false,
+//       id: uuidv4(), // A random id (for err.js)
+//       event: 'click', 
+//       site_id: '7890', 
+//       affiliateLink: responseUrl 
+//   };
 
-  // You could add logic to track specific events here
-  if (url.includes('error')) {
-      response.error = true;
-  }
+//   // You could add logic to track specific events here
+//   if (url.includes('error')) {
+//       response.error = true;
+//   }
 
-  res.json(response);
-});
+//   res.json(response);
+// });
 
 // Serve err.js script
-app.get('/api/trackdata/err.js', (req, res) => {
-  const id = req.query.id;
-  res.type('application/javascript');
-  res.send(`
-      console.log("Error ID: ${id}");
-      // Custom error tracking logic here
-  `);
-});
+// app.get('/api/trackdata/err.js', (req, res) => {
+//   const id = req.query.id;
+//   res.type('application/javascript');
+//   res.send(`
+//       console.log("Error ID: ${id}");
+//       // Custom error tracking logic here
+//   `);
+// });
 
 
-app.get('/api/track_event', (req, res) => {
-  const { site_id, user_id, event } = req.query;
+// app.get('/api/track_event', (req, res) => {
+//   const { site_id, user_id, event } = req.query;
   
-  // Log the event data for debugging purposes
-  console.log(`Event: ${event}, Site ID: ${site_id}, User ID: ${user_id}`);
+//   // Log the event data for debugging purposes
+//   console.log(`Event: ${event}, Site ID: ${site_id}, User ID: ${user_id}`);
   
-  // Generate or retrieve affiliate link based on the tracking parameters
-  const responseUrl =
-  trackingUrls[origin] || "https://tracktraffics.com";
+//   // Generate or retrieve affiliate link based on the tracking parameters
+//   const responseUrl =
+//   trackingUrls[origin] || "https://tracktraffics.com";
 
-  // Here you might want to log this information or send it to a tracking system
-  // Example: save to a database or send to an analytics service
+//   // Here you might want to log this information or send it to a tracking system
+//   // Example: save to a database or send to an analytics service
 
-  // For demonstration, let's log the affiliate link
-  console.log(`Affiliate Link: ${responseUrl}`);
+//   // For demonstration, let's log the affiliate link
+//   console.log(`Affiliate Link: ${responseUrl}`);
   
-  // Serve a 1x1 pixel transparent GIF to be used in an iframe
-  res.setHeader('Content-Type', 'image/gif');
-  res.send(Buffer.from('R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', 'base64'));
-});
+//   // Serve a 1x1 pixel transparent GIF to be used in an iframe
+//   res.setHeader('Content-Type', 'image/gif');
+//   res.send(Buffer.from('R0lGODlhAQABAPAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==', 'base64'));
+// });
 
 
-app.post("/api/scriptdataredirect", async (req, res) => {
-  const { url, referrer, coo, origin } = req.body;
+// app.post("/api/scriptdataredirect", async (req, res) => {
+//   const { url, referrer, coo, origin } = req.body;
 
-  // Determine the tracking URL based on the origin
-  const responseUrl =
-    trackingUrls[origin] || "https://tracktraffics.com";
+//   // Determine the tracking URL based on the origin
+//   const responseUrl =
+//     trackingUrls[origin] || "https://tracktraffics.com";
 
-  try {
+//   try {
     
-    res.redirect(302, responseUrl);
-  } catch (err) {
-    console.error("Error saving tracking data:", err);
-    res.status(500).json({ error: "Failed to save tracking data" });
-  }
-});
+//     res.redirect(302, responseUrl);
+//   } catch (err) {
+//     console.error("Error saving tracking data:", err);
+//     res.status(500).json({ error: "Failed to save tracking data" });
+//   }
+// });
 
-app.post("/api/datascript", async (req, res) => {
-  const { url, referrer, coo, origin } = req.body;
-  // const responseUrl =
-  // trackingUrls[origin] || "https://tracktraffics.com";
+// app.post("/api/datascript", async (req, res) => {
+//   const { url, referrer, coo, origin } = req.body;
+//   // const responseUrl =
+//   // trackingUrls[origin] || "https://tracktraffics.com";
 
-  try {
-    const affiliateData = await getAffiliateUrlByHostNameFind(origin,'HostName');
-    console.log('Affiliate URL:', affiliateData);
+//   try {
+//     const affiliateData = await getAffiliateUrlByHostNameFind(origin,'HostName');
+//     console.log('Affiliate URL:', affiliateData);
   
-    res.json({name:'optimistix',url:affiliateData});
-    //res.redirect(responseUrl);
-  } catch (err) {
-    console.error("Error saving tracking data:", err);
-    res.status(500).json({ error: "Failed to save tracking data" });
-  }
-});
+//     res.json({name:'optimistix',url:affiliateData});
+//     //res.redirect(responseUrl);
+//   } catch (err) {
+//     console.error("Error saving tracking data:", err);
+//     res.status(500).json({ error: "Failed to save tracking data" });
+//   }
+// });
 
 
 
@@ -329,24 +329,20 @@ app.post("/api/datascript", async (req, res) => {
 
 // Endpoint to track users and return the affiliate URL
 app.post('/api/track-usersec', async (req, res) => {
-  const { url, referrer, unique_id,origin } = req.body;
+  const { url, referrer, unique_id, origin } = req.body;
 
-  // Validate the incoming data
   if (!url || !unique_id) {
       return res.status(400).json({ success: false, error: 'Invalid request data' });
   }
 
-  // const affiliateUrl = trackingUrls[origin] || ""; 
   try {
-
-    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-     // const affiliateUrl = trackingUrls[origin] || "VijjuRock";
-    console.log("affiliateUrl => ", affiliateUrl)
-  res.json({ success: true, affiliate_url: "https://clk.omgt4.com/?PID=56323&AID=2356115" });
+      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+      console.log("affiliateUrl => ", affiliateUrl);
+      res.json({ success: true, affiliate_url: "https://clk.omgt4.com/?PID=56323&AID=2356115" });
   } catch (error) {
-    console.error(error);
+      console.error(error);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
-
 });
 
 
@@ -497,7 +493,6 @@ app.get('/api/fallback-pixel', (req, res) => {
 
 
 app.use(express.static(path.join(__dirname, "public")));
-
 
 
 
