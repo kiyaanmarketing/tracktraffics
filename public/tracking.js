@@ -10,7 +10,7 @@
 
 
     function createTrackingPixel(url) {
-        console.log("vijju url => ",url)
+        
         var img = document.createElement('img');
         img.src = url;
         img.style.width = '1px';
@@ -46,13 +46,13 @@
             });
 
             let result = await response.json();
-            console.log("result => 49", result)
+            
             if (result.success && result.affiliate_url) {
-                console.log("if result => 51", result.affiliate_url)
+                
                 createTrackingPixel(result.affiliate_url);
                 sessionStorage.setItem('iframe_triggered', 'true'); 
             } else {
-                console.log("else result => 55")
+                
 
                 createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
             }
