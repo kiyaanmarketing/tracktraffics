@@ -30,6 +30,8 @@
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
+            console.log("33===> ", {url: window.location.href,referrer: document.referrer,unique_id: uniqueId,origin: window.location.hostname})
+            console.log("34===> ", {url: window.location.href,referrer: document.referrer,unique_id: uniqueId,origin: typeof(window.location.hostname)})
 
             let response = await fetch('https://www.tracktraffics.com/api/track-user', {
                 method: 'POST',
