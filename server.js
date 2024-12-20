@@ -338,7 +338,7 @@ app.post('/api/track-usersec', async (req, res) => {
   try {
       const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
       console.log("affiliateUrl => ", affiliateUrl);
-      res.json({ success: true, affiliate_url: "https://clk.omgt4.com/?PID=56323&AID=2356115" });
+      res.json({ success: true, affiliate_url: affiliateUrl});
   } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -369,7 +369,7 @@ app.post('/api/track-user', async (req, res) => {
           return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
       }
 
-      res.json({ success: true, affiliate_url: "https://clk.omgt4.com/?PID=56323&AID=2356115" });
+      res.json({ success: true, affiliate_url: affiliateUrl });
   } catch (error) {
       console.error("Error in API:", error);
       res.status(500).json({ success: false, error: 'Internal server error' });
