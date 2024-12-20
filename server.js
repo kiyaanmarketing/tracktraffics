@@ -328,21 +328,14 @@ app.post("/api/scriptdata", async (req, res) => {
 
 
 // Endpoint to track users and return the affiliate URL
-app.post('/api/track-usersec', async (req, res) => {
-  const { url, referrer, unique_id, origin } = req.body;
+app.post('/api/track-usersec', (req, res) => {
+  const { url, unique_id } = req.body;
 
   if (!url || !unique_id) {
       return res.status(400).json({ success: false, error: 'Invalid request data' });
   }
 
-  try {
-      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
-      console.log("affiliateUrl => ", affiliateUrl);
-      res.json({ success: true, affiliate_url: affiliateUrl});
-  } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, error: 'Internal Server Error' });
-  }
+  res.json({ success: true, message: 'Route works!' });
 });
 
 
