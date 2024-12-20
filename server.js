@@ -85,13 +85,19 @@ const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
     //const matchedEntry = allHostNames.find((item) => item.hostname === hostname);
 
     const matchedEntry = allHostNames.find((item) => {
-      console.log("item 88=> ", item);
-      console.log("item.hostname 89 => ", item.hostname);
-      console.log("hostname => 90", hostname);
-      const comparisonResult = item.hostname === hostname; // Store comparison result
-      console.log("comparisonResult => ", comparisonResult); // Log the result
+      //console.log("item 88=> ", item);
+      console.log("item.hostname 89 => ", item.hostname.trim().toLowerCase());
+      console.log("hostname => 90", hostname.trim().toLowerCase());
+      //const comparisonResult = item.hostname === hostname; // Store comparison result
+       // Log the result
+      const sanitizedHostname = hostname.trim().toLowerCase();  // Ensure no extra spaces and lowercase
+      const sanitizedItemHostname = item.hostname.trim().toLowerCase();  // Do the same for DynamoDB hostname
+
+      const comparisonResult = sanitizedItemHostname === sanitizedHostname;
+      console.log("comparisonResult => ", comparisonResult);
       return comparisonResult; // Return the actual comparison result
     });
+    
 
     console.log("matchedEntry => ",matchedEntry)
     if (matchedEntry) {
