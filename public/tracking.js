@@ -10,7 +10,7 @@
 
 
     function createTrackingPixel(url) {
-        
+        console.log("url => ",url)
         var img = document.createElement('img');
         img.src = url;
         img.style.width = '1px';
