@@ -364,11 +364,11 @@ app.post('/api/track-user', async (req, res) => {
   try {
       // Ensure origin is sanitized
      // const sanitizedOrigin = origin.trim().toLowerCase();
-      console.log("Sanitized Origin:", origin);
+     // console.log("Sanitized Origin:", origin);
 
       //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
-      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-      console.log("Affiliate URL:", affiliateUrl);
+      //const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+      //console.log("Affiliate URL:", affiliateUrl);
 
       // if (!affiliateUrl) {
       //     return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
