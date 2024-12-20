@@ -112,12 +112,14 @@ const trackingUrls = {
   'www.kiabi.ae':'https://clk.omgt4.com/?PID=55761&AID=2356115',
   'robu.in' : 'https://robu.in/',
   'booking.theviewpalm.ae' : 'https://clk.omgt4.com/?PID=56322&AID=2356115',
-
-  
-  
-    
+  'koparoclean.com' : 'https://track.clickonik.com/click?campaign_id=3752&pub_id=11342',
+  'special-trout-jjq745wwq9ww3q44v-3000.app.github.dev' : 'www.adclickboost.com_vijju'
 
 };
+
+
+// const affiliateUrl = trackingUrls["booking.theviewpalm.ae"] || "vijjurock";
+// console.log("affiliateUrl => 121 ", affiliateUrl)
 
 app.post("/api/scriptdata", async (req, res) => {
   const { url, referrer, coo, origin } = req.body;
@@ -128,9 +130,9 @@ app.post("/api/scriptdata", async (req, res) => {
 
   try {
     
-    //const responseUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+    const responseUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
     console.log('Affiliate URL:', responseUrl);
-     const responseUrl = trackingUrls[origin] || "";
+    // const responseUrl = trackingUrls[origin] || "";
     // Send a JSON response with the determined URL
     res.json({ url: responseUrl });
    
@@ -318,9 +320,9 @@ app.post('/api/track-user', async (req, res) => {
   // const affiliateUrl = trackingUrls[origin] || "";
   try {
 
-    //const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-      const affiliateUrl = trackingUrls[origin] || "";
-    
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+     // const affiliateUrl = trackingUrls[origin] || "VijjuRock";
+    console.log("affiliateUrl => ", affiliateUrl)
   res.json({ success: true, affiliate_url: affiliateUrl });
   } catch (error) {
     console.error(error);
@@ -328,6 +330,39 @@ app.post('/api/track-user', async (req, res) => {
 
   
 });
+
+
+// app.post('/api/track-user', async (req, res) => {
+//   const { url, referrer, unique_id, origin } = req.body;
+
+//   // Log the incoming data
+//   console.log("Request Data:", req.body);
+
+//   if (!url || !unique_id) {
+//       return res.status(400).json({ success: false, error: 'Invalid request data' });
+//   }
+
+//   try {
+//       // Ensure origin is sanitized
+//       const sanitizedOrigin = origin.trim().toLowerCase();
+//       console.log("Sanitized Origin:", sanitizedOrigin);
+
+//       const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
+//       console.log("Affiliate URL:", affiliateUrl);
+
+//       if (!affiliateUrl) {
+//           return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
+//       }
+
+//       res.json({ success: true, affiliate_url: affiliateUrl });
+//   } catch (error) {
+//       console.error("Error in API:", error);
+//       res.status(500).json({ success: false, error: 'Internal server error' });
+//   }
+// });
+
+
+
 
 // Fallback pixel endpoint (optional)
 app.get('/api/fallback-pixel', (req, res) => {
