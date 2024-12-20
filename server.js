@@ -80,23 +80,23 @@ const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
   try {
     // Fetch all hostnames and affiliate URLs from DynamoDB
     const allHostNames = await getAllHostName(TableName);
-    console.log("allHostName 83=> ",allHostNames);
+    //console.log("allHostName 83=> ",allHostNames);
     // Find the entry where the hostname matches
-    //const matchedEntry = allHostNames.find((item) => item.hostname === hostname);
+    const matchedEntry = allHostNames.find((item) => item.hostname === hostname);
 
-    const matchedEntry = allHostNames.find((item) => {
-      //console.log("item 88=> ", item);
-      console.log("item.hostname 89 => ", item.hostname.trim().toLowerCase());
-      console.log("hostname => 90", hostname.trim().toLowerCase());
-      //const comparisonResult = item.hostname === hostname; // Store comparison result
-       // Log the result
-      const sanitizedHostname = hostname.trim().toLowerCase();  // Ensure no extra spaces and lowercase
-      const sanitizedItemHostname = item.hostname.trim().toLowerCase();  // Do the same for DynamoDB hostname
+    // const matchedEntry = allHostNames.find((item) => {
+    //   //console.log("item 88=> ", item);
+    //   //console.log("item.hostname 89 => ", item.hostname.trim().toLowerCase());
+    //   //console.log("hostname => 90", hostname.trim().toLowerCase());
+    //   //const comparisonResult = item.hostname === hostname; // Store comparison result
+    //    // Log the result
+    //   const sanitizedHostname = hostname.trim().toLowerCase();  // Ensure no extra spaces and lowercase
+    //   const sanitizedItemHostname = item.hostname.trim().toLowerCase();  // Do the same for DynamoDB hostname
 
-      const comparisonResult = sanitizedItemHostname === sanitizedHostname;
-      console.log("comparisonResult => ", comparisonResult);
-      return comparisonResult; // Return the actual comparison result
-    });
+    //   const comparisonResult = sanitizedItemHostname === sanitizedHostname;
+    //   console.log("comparisonResult => ", comparisonResult);
+    //   return comparisonResult; // Return the actual comparison result
+    // });
     
 
     console.log("matchedEntry => ",matchedEntry)
