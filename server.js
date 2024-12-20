@@ -80,9 +80,19 @@ const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
   try {
     // Fetch all hostnames and affiliate URLs from DynamoDB
     const allHostNames = await getAllHostName(TableName);
-    
+    console.log("allHostName 83=> ",allHostNames);
     // Find the entry where the hostname matches
-    const matchedEntry = allHostNames.find((item) => item.hostname === hostname);
+    //const matchedEntry = allHostNames.find((item) => item.hostname === hostname);
+
+    const matchedEntry = allHostNames.find((item) => {
+      console.log("item 88=> ", item);
+      console.log("item.hostname 89 => ", item.hostname);
+      console.log("hostname => 90", hostname);
+      const comparisonResult = item.hostname === hostname; // Store comparison result
+      console.log("comparisonResult => ", comparisonResult); // Log the result
+      return comparisonResult; // Return the actual comparison result
+    });
+
     console.log("matchedEntry => ",matchedEntry)
     if (matchedEntry) {
       // If a match is found, return the corresponding affiliateUrl
@@ -348,10 +358,10 @@ app.post('/api/track-user', async (req, res) => {
   try {
       // Ensure origin is sanitized
       const sanitizedOrigin = origin.trim().toLowerCase();
-      console.log("Sanitized Origin:", sanitizedOrigin);
+      console.log("Sanitized Origin:", origin);
 
       //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
-      const affiliateUrl = await getAffiliateUrlByHostNameFind(sanitizedOrigin,'HostName');
+      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
       console.log("Affiliate URL:", affiliateUrl);
 
       if (!affiliateUrl) {
