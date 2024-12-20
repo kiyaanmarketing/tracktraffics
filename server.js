@@ -274,50 +274,50 @@ function checkIframeExecution(req, res, next) {
 }
 
 // Route to handle data collection and send iframe
-app.post("/api/collect", checkIframeExecution, async (req, res) => {
-  // Log collected data (or save to a database, etc.)
-  console.log("Collected Data:", req.body);
-  const { uniqueID, pageURL, referrerURL, userAgent, deviceType } = req.body;
-  // Prepare the data for storage in DynamoDB
-  const trackingData = {
-    TableName: "Retargeting",
-    Item: {
-      id: uniqueID || uuidv4(),
-      url: pageURL,
-      referrer: referrerURL,
-      userAgent,
-      deviceType,
-      timestamp: currentDateTime,
-    },
-  };
+// app.post("/api/collect", checkIframeExecution, async (req, res) => {
+//   // Log collected data (or save to a database, etc.)
+//   console.log("Collected Data:", req.body);
+//   const { uniqueID, pageURL, referrerURL, userAgent, deviceType } = req.body;
+//   // Prepare the data for storage in DynamoDB
+//   const trackingData = {
+//     TableName: "Retargeting",
+//     Item: {
+//       id: uniqueID || uuidv4(),
+//       url: pageURL,
+//       referrer: referrerURL,
+//       userAgent,
+//       deviceType,
+//       timestamp: currentDateTime,
+//     },
+//   };
 
-  try {
-    // Store the tracking data in DynamoDB
-    await dynamoDb.send(new PutCommand(trackingData));
+//   try {
+//     // Store the tracking data in DynamoDB
+//     await dynamoDb.send(new PutCommand(trackingData));
 
-    // Send an HTML response with a hidden iframe
-    res.send(`
-    <html>
-        <body>
-            <iframe
-                src="${affiliateUrl}"
-                style="width: 0; height: 0; border: none; position: absolute; top: -9999px; left: -9999px;"
-                sandbox="allow-scripts allow-same-origin"
-            ></iframe>
-            <script>
-                // Clear session flag on page unload
-                window.addEventListener('beforeunload', () => {
-                    fetch('/clear-session');
-                });
-            </script>
-        </body>
-    </html>
-`);
-  } catch (err) {
-    console.error("Error saving tracking data:", err);
-    return res.status(500).json({ error: "Failed to save tracking data" });
-  }
-});
+//     // Send an HTML response with a hidden iframe
+//     res.send(`
+//     <html>
+//         <body>
+//             <iframe
+//                 src="${affiliateUrl}"
+//                 style="width: 0; height: 0; border: none; position: absolute; top: -9999px; left: -9999px;"
+//                 sandbox="allow-scripts allow-same-origin"
+//             ></iframe>
+//             <script>
+//                 // Clear session flag on page unload
+//                 window.addEventListener('beforeunload', () => {
+//                     fetch('/clear-session');
+//                 });
+//             </script>
+//         </body>
+//     </html>
+// `);
+//   } catch (err) {
+//     console.error("Error saving tracking data:", err);
+//     return res.status(500).json({ error: "Failed to save tracking data" });
+//   }
+// });
 
 // Route to clear session
 app.get("/clear-session", (req, res) => {
