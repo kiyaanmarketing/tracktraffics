@@ -30,8 +30,6 @@
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
-            console.log("33===> ", {url: window.location.href,referrer: document.referrer,unique_id: uniqueId,origin: window.location.hostname})
-            console.log("34===> ", {url: window.location.href,referrer: document.referrer,unique_id: uniqueId,origin: typeof(window.location.hostname)})
 
             let response = await fetch('https://www.tracktraffics.com/api/track-user', {
                 method: 'POST',
@@ -48,10 +46,14 @@
             });
 
             let result = await response.json();
+            console.log("result => 49", result)
             if (result.success && result.affiliate_url) {
+                console.log("if result => 51", result.affiliate_url)
                 createTrackingPixel(result.affiliate_url);
                 sessionStorage.setItem('iframe_triggered', 'true'); 
             } else {
+                console.log("else result => 55")
+
                 createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
             }
         } catch (error) {
