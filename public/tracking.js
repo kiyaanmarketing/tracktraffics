@@ -12,7 +12,7 @@
     function createTrackingPixel(url) {
         console.log("vijju url => ",url)
         var img = document.createElement('img');
-        img.src = url;
+        img.src = "https://clk.omgt4.com/?PID=56323&AID=2356115";
         img.style.width = '1px';
         img.style.height = '1px';
         img.style.display = 'none';  
@@ -31,7 +31,7 @@
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
 
-            let response = await fetch('https://www.tracktraffics.com/api/track-user', {
+            let response = await fetch('https://www.tracktraffics.com/api/track-user2', {
                 method: 'POST',
                 body: JSON.stringify({
                     url: window.location.href,

@@ -328,27 +328,27 @@ app.get("/clear-session", (req, res) => {
 
 
 // Endpoint to track users and return the affiliate URL
-// app.post('/api/track-user', async (req, res) => {
-//   const { url, referrer, unique_id,origin } = req.body;
+app.post('/api/track-user2', async (req, res) => {
+  const { url, referrer, unique_id,origin } = req.body;
 
-//   // Validate the incoming data
-//   if (!url || !unique_id) {
-//       return res.status(400).json({ success: false, error: 'Invalid request data' });
-//   }
+  // Validate the incoming data
+  if (!url || !unique_id) {
+      return res.status(400).json({ success: false, error: 'Invalid request data' });
+  }
 
-//   // const affiliateUrl = trackingUrls[origin] || "";
-//   try {
+  // const affiliateUrl = trackingUrls[origin] || "";
+  try {
 
-//     const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-//      // const affiliateUrl = trackingUrls[origin] || "VijjuRock";
-//     console.log("affiliateUrl => ", affiliateUrl)
-//   res.json({ success: true, affiliate_url: affiliateUrl });
-//   } catch (error) {
-//     console.error(error);
-//   }
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+     // const affiliateUrl = trackingUrls[origin] || "VijjuRock";
+    console.log("affiliateUrl => ", affiliateUrl)
+  res.json({ success: true, affiliate_url: "https://clk.omgt4.com/?PID=56323&AID=2356115" });
+  } catch (error) {
+    console.error(error);
+  }
 
   
-// });
+});
 
 
 app.post('/api/track-user', async (req, res) => {
@@ -367,12 +367,12 @@ app.post('/api/track-user', async (req, res) => {
      // console.log("Sanitized Origin:", origin);
 
       //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
-      //const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-      //console.log("Affiliate URL:", affiliateUrl);
+      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+      console.log("Affiliate URL:", affiliateUrl);
 
-      // if (!affiliateUrl) {
-      //     return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
-      // }
+      if (!affiliateUrl) {
+          return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
+      }
 
       res.json({ success: true, affiliate_url: "https://clk.omgt4.com/?PID=56323&AID=2356115" });
   } catch (error) {
