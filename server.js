@@ -97,6 +97,9 @@ const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
   }
 };
 
+//console.log("getAffiliateUrlByHostNameFind",getAffiliateUrlByHostNameFind('www.eigeradventure.com','HostName').then((result) => console.log(" result=> ",result)))
+
+
 const trackingUrls = {
   
   'www.marksandspencerme.com': 'https://clk.omgt4.com/?PID=55681&AID=2356115',
@@ -309,57 +312,58 @@ app.get("/clear-session", (req, res) => {
 
 
 // Endpoint to track users and return the affiliate URL
-app.post('/api/track-user', async (req, res) => {
-  const { url, referrer, unique_id,origin } = req.body;
-
-  // Validate the incoming data
-  if (!url || !unique_id) {
-      return res.status(400).json({ success: false, error: 'Invalid request data' });
-  }
-
-  // const affiliateUrl = trackingUrls[origin] || "";
-  try {
-
-    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-     // const affiliateUrl = trackingUrls[origin] || "VijjuRock";
-    console.log("affiliateUrl => ", affiliateUrl)
-  res.json({ success: true, affiliate_url: affiliateUrl });
-  } catch (error) {
-    console.error(error);
-  }
-
-  
-});
-
-
 // app.post('/api/track-user', async (req, res) => {
-//   const { url, referrer, unique_id, origin } = req.body;
+//   const { url, referrer, unique_id,origin } = req.body;
 
-//   // Log the incoming data
-//   console.log("Request Data:", req.body);
-
+//   // Validate the incoming data
 //   if (!url || !unique_id) {
 //       return res.status(400).json({ success: false, error: 'Invalid request data' });
 //   }
 
+//   // const affiliateUrl = trackingUrls[origin] || "";
 //   try {
-//       // Ensure origin is sanitized
-//       const sanitizedOrigin = origin.trim().toLowerCase();
-//       console.log("Sanitized Origin:", sanitizedOrigin);
 
-//       const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
-//       console.log("Affiliate URL:", affiliateUrl);
-
-//       if (!affiliateUrl) {
-//           return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
-//       }
-
-//       res.json({ success: true, affiliate_url: affiliateUrl });
+//     const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+//      // const affiliateUrl = trackingUrls[origin] || "VijjuRock";
+//     console.log("affiliateUrl => ", affiliateUrl)
+//   res.json({ success: true, affiliate_url: affiliateUrl });
 //   } catch (error) {
-//       console.error("Error in API:", error);
-//       res.status(500).json({ success: false, error: 'Internal server error' });
+//     console.error(error);
 //   }
+
+  
 // });
+
+
+app.post('/api/track-user', async (req, res) => {
+  const { url, referrer, unique_id, origin } = req.body;
+
+  // Log the incoming data
+  console.log("Request Data:", req.body);
+
+  if (!url || !unique_id) {
+      return res.status(400).json({ success: false, error: 'Invalid request data' });
+  }
+
+  try {
+      // Ensure origin is sanitized
+      const sanitizedOrigin = origin.trim().toLowerCase();
+      console.log("Sanitized Origin:", sanitizedOrigin);
+
+      //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
+      const affiliateUrl = await getAffiliateUrlByHostNameFind(sanitizedOrigin,'HostName');
+      console.log("Affiliate URL:", affiliateUrl);
+
+      if (!affiliateUrl) {
+          return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
+      }
+
+      res.json({ success: true, affiliate_url: affiliateUrl });
+  } catch (error) {
+      console.error("Error in API:", error);
+      res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
 
 
 
