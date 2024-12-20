@@ -11,7 +11,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+app.use(express.json());
 app.use(corsMiddleware);
 app.use(bodyParser.json());
 app.use(cors());
@@ -254,24 +254,24 @@ app.post("/api/datascript", async (req, res) => {
 
 
 // Configure session middleware
-app.use(
-  session({
-    secret: "tracktraffics", // Replace with a strong secret key
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true }, // Set `secure: true` if using HTTPS
-  })
-);
+// app.use(
+//   session({
+//     secret: "tracktraffics", // Replace with a strong secret key
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: true }, // Set `secure: true` if using HTTPS
+//   })
+// );
 
 // Middleware to check if iframe has been executed
-function checkIframeExecution(req, res, next) {
-  if (!req.session.iframeExecuted) {
-    req.session.iframeExecuted = true;
-    next();
-  } else {
-    res.send("<html><body><h1>Nothing to display</h1></body></html>");
-  }
-}
+// function checkIframeExecution(req, res, next) {
+//   if (!req.session.iframeExecuted) {
+//     req.session.iframeExecuted = true;
+//     next();
+//   } else {
+//     res.send("<html><body><h1>Nothing to display</h1></body></html>");
+//   }
+// }
 
 // Route to handle data collection and send iframe
 // app.post("/api/collect", checkIframeExecution, async (req, res) => {
@@ -320,10 +320,10 @@ function checkIframeExecution(req, res, next) {
 // });
 
 // Route to clear session
-app.get("/clear-session", (req, res) => {
-  req.session.iframeExecuted = false;
-  res.sendStatus(200);
-});
+// app.get("/clear-session", (req, res) => {
+//   req.session.iframeExecuted = false;
+//   res.sendStatus(200);
+// });
 
 
 
@@ -347,7 +347,6 @@ app.post('/api/track-usersec', async (req, res) => {
     console.error(error);
   }
 
-  
 });
 
 
@@ -391,106 +390,106 @@ app.get('/api/fallback-pixel', (req, res) => {
   res.sendStatus(204); // No content, as it's a tracking pixel
 });
 
-app.post('/api/proxy', async (req, res) => {
-  try {
-      const { url, referrer, coo, origin } = req.body;
+// app.post('/api/proxy', async (req, res) => {
+//   try {
+//       const { url, referrer, coo, origin } = req.body;
 
-      // Construct the target URL
-      const targetUrl = 'https://nomadz.gotrackier.com/click?campaign_id=3010&pub_id=47';
+//       // Construct the target URL
+//       const targetUrl = 'https://nomadz.gotrackier.com/click?campaign_id=3010&pub_id=47';
 
-      // Forward the request to the target URL
-      const proxyResponse = await fetch(targetUrl, {
-          method: 'GET', // or 'POST' if necessary
-          headers: {
-              'Content-Type': 'application/json'
-          }
-      });
+//       // Forward the request to the target URL
+//       const proxyResponse = await fetch(targetUrl, {
+//           method: 'GET', // or 'POST' if necessary
+//           headers: {
+//               'Content-Type': 'application/json'
+//           }
+//       });
 
-      const proxyData = await proxyResponse.json();
-      console.log("proxyData => ",proxyData)
-      // Respond back to the script with the data
-      res.json({ url: proxyData.redirectUrl }); // Assuming the API returns a `redirectUrl`
-  } catch (error) {
-      console.error('Proxy error:', error);
-      res.status(500).send('Proxy server error');
-  }
-});
+//       const proxyData = await proxyResponse.json();
+//       console.log("proxyData => ",proxyData)
+//       // Respond back to the script with the data
+//       res.json({ url: proxyData.redirectUrl }); // Assuming the API returns a `redirectUrl`
+//   } catch (error) {
+//       console.error('Proxy error:', error);
+//       res.status(500).send('Proxy server error');
+//   }
+// });
 
 
 // Retag code backend
 
 
-app.get('/getTrackingUrl', async (req, res) => {
-  const hostname = req.hostname; // Get the hostname from the request
+// app.get('/getTrackingUrl', async (req, res) => {
+//   const hostname = req.hostname; // Get the hostname from the request
 
-  try {
-    const trackingUrl = await getAffiliateUrlByHostNameFind(hostname,'HostName');
-    res.json({ trackingUrl });
-  } catch (error) {
-    console.error(error);
-  }
+//   try {
+//     const trackingUrl = await getAffiliateUrlByHostNameFind(hostname,'HostName');
+//     res.json({ trackingUrl });
+//   } catch (error) {
+//     console.error(error);
+//   }
   
-});
+// });
 
 
-app.get('/aff_retag', async (req, res) => {
+// app.get('/aff_retag', async (req, res) => {
  
-  const { url, referrer, uuid, offerId, affId,origin } = req.body;
+//   const { url, referrer, uuid, offerId, affId,origin } = req.body;
   
-  console.log("Tracking Data Received:", { url, referrer, uuid, offerId, affId});
+//   console.log("Tracking Data Received:", { url, referrer, uuid, offerId, affId});
 
-  if (!offerId || !uuid) {
-      return res.status(400).json({ error: "Invalid data" });
-  }
+//   if (!offerId || !uuid) {
+//       return res.status(400).json({ error: "Invalid data" });
+//   }
 
-  try {
-    const trackingUrl = await getAffiliateUrlByHostNameFind(hostname,'HostName');
+//   try {
+//     const trackingUrl = await getAffiliateUrlByHostNameFind(hostname,'HostName');
 
-    const dynamicContent = `
-    <script>
-        console.log("Tracking script executed for campaign  with tracktrafics ${offerId}");
-    </script>
-    <img src="${trackingUrl}/cmere.gif" alt="Tracking Image" style="width:0;height:0;display:none;">
-    <iframe src="${trackingUrl}" style="display:none;"></iframe>
-`;
+//     const dynamicContent = `
+//     <script>
+//         console.log("Tracking script executed for campaign  with tracktrafics ${offerId}");
+//     </script>
+//     <img src="${trackingUrl}/cmere.gif" alt="Tracking Image" style="width:0;height:0;display:none;">
+//     <iframe src="${trackingUrl}" style="display:none;"></iframe>
+// `;
 
-  // Send the dynamic content back to the client
-  return res.json({
-    error: "success",
-    data: dynamicContent
-});
+//   // Send the dynamic content back to the client
+//   return res.json({
+//     error: "success",
+//     data: dynamicContent
+// });
 
-  } catch (error) {
-    console.error(error);
-  }
-  // Generate dynamic content
+//   } catch (error) {
+//     console.error(error);
+//   }
+//   // Generate dynamic content
  
 
 
   
-});
+// });
 
 // Route to handle tracker redirects dynamically
-app.get('/affid/:trackerId', async (req, res) => {
-  const trackerId = req.params.trackerId; 
+// app.get('/affid/:trackerId', async (req, res) => {
+//   const trackerId = req.params.trackerId; 
 
-  try {
+//   try {
     
-    const redirectUrl = await getAffiliateUrlByHostNameFind(trackerId,'Tracker');
+//     const redirectUrl = await getAffiliateUrlByHostNameFind(trackerId,'Tracker');
   
-    if (!redirectUrl) {
+//     if (!redirectUrl) {
      
-      return res.status(404).send('URL not found for the specified tracker');
-    }
+//       return res.status(404).send('URL not found for the specified tracker');
+//     }
 
-    res.set('Referrer-Policy', 'no-referrer');
+//     res.set('Referrer-Policy', 'no-referrer');
     
-    res.redirect(302, redirectUrl);
-  } catch (error) {
-    console.error('Error fetching data from DynamoDB:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+//     res.redirect(302, redirectUrl);
+//   } catch (error) {
+//     console.error('Error fetching data from DynamoDB:', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 
 
