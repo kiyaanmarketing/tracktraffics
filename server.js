@@ -76,12 +76,12 @@ const currentDateTime = getCurrentDateTime();
 // console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
 // getAllHostName('HostName').then((result) =>
   
-  
+
 
 // console.log("Arru => ",affiliate_urlArr = result.map(item => item.affiliateUrl))
 // )
 
-
+ 
 
 const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
   try {
@@ -93,7 +93,7 @@ const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
 
 
     console.log("matchedEntry => ",matchedEntry)
-    if (matchedEntry) {
+    if (matchedEntry) { 
       // If a match is found, return the corresponding affiliateUrl
       return matchedEntry.affiliateUrl;
     } else {
@@ -331,7 +331,10 @@ app.post('/api/multirack-user', async (req, res) => {
 
   try {
    
-    const affiliateUrl = await getAllHostName('HostName').map(item => item.affiliateUrl);
+    const allAffiliateUrl = await getAllHostName('HostName');
+   
+    const affiliateUrl = allAffiliateUrl.map(item => item.affiliateUrl);
+    //const affiliateUrl = await getAllHostName('HostName').map(item => item.affiliateUrl);
     
     console.log("Affiliate URL:", affiliateUrl);
 
