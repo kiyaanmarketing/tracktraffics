@@ -73,31 +73,24 @@ const currentDateTime = getCurrentDateTime();
   }
 };
 
-//console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
+// console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
+// getAllHostName('HostName').then((result) =>
+  
+  
+
+// console.log("Arru => ",affiliate_urlArr = result.map(item => item.affiliateUrl))
+// )
+
 
 
 const getAffiliateUrlByHostNameFind = async (hostname,TableName) => {
   try {
     // Fetch all hostnames and affiliate URLs from DynamoDB
     const allHostNames = await getAllHostName(TableName);
-    //console.log("allHostName 83=> ",allHostNames);
+    
     // Find the entry where the hostname matches
     const matchedEntry = allHostNames.find((item) => item.hostname === hostname);
 
-    // const matchedEntry = allHostNames.find((item) => {
-    //   //console.log("item 88=> ", item);
-    //   //console.log("item.hostname 89 => ", item.hostname.trim().toLowerCase());
-    //   //console.log("hostname => 90", hostname.trim().toLowerCase());
-    //   //const comparisonResult = item.hostname === hostname; // Store comparison result
-    //    // Log the result
-    //   const sanitizedHostname = hostname.trim().toLowerCase();  // Ensure no extra spaces and lowercase
-    //   const sanitizedItemHostname = item.hostname.trim().toLowerCase();  // Do the same for DynamoDB hostname
-
-    //   const comparisonResult = sanitizedItemHostname === sanitizedHostname;
-    //   console.log("comparisonResult => ", comparisonResult);
-    //   return comparisonResult; // Return the actual comparison result
-    // });
-    
 
     console.log("matchedEntry => ",matchedEntry)
     if (matchedEntry) {
@@ -328,14 +321,29 @@ app.post("/api/scriptdata", async (req, res) => {
 
 
 // Endpoint to track users and return the affiliate URL
-app.post('/api/track-usersec', (req, res) => {
-  const { url, unique_id } = req.body;
+app.post('/api/multirack-user', async (req, res) => {
+  const { url, referrer, unique_id, origin } = req.body;
+  //const { url, unique_id } = req.body;
 
   if (!url || !unique_id) {
       return res.status(400).json({ success: false, error: 'Invalid request data' });
   }
 
-  res.json({ success: true, message: 'Route works!' });
+  try {
+   
+    const affiliateUrl = await getAllHostName('HostName').map(item => item.affiliateUrl);
+    
+    console.log("Affiliate URL:", affiliateUrl);
+
+    if (!affiliateUrl) {
+        return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
+    }
+
+    res.json({ success: true, affiliate_url: affiliateUrl });
+} catch (error) {
+    console.error("Error in API:", error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+}
 });
 
 
