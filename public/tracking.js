@@ -75,6 +75,14 @@
         }
         return '';
     }
+    function isCardPage() {
+        const cardPageUrls = ['/cart', '/checkout']; 
+        return cardPageUrls.some(url => window.location.pathname.includes(url));
+    }
+    
+    if (isCardPage()) {
+        initTracking();
+    }
 
-   initTracking()
+   //initTracking()
 })();
