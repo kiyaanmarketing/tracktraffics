@@ -74,12 +74,8 @@ const currentDateTime = getCurrentDateTime();
 };
 
 // console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
-// getAllHostName('HostName').then((result) =>
-  
-
-
-// console.log("Arru => ",affiliate_urlArr = result.map(item => item.affiliateUrl))
-// )
+//  getAllHostName('MuiltiRetag').then((result) =>
+//  console.log("Arru => ",affiliate_urlArr = result.map(item => item.affiliateUrl)) )
 
  
 
@@ -331,7 +327,7 @@ app.post('/api/multirack-user', async (req, res) => {
 
   try {
    
-    const allAffiliateUrl = await getAllHostName('HostName');
+    const allAffiliateUrl = await getAllHostName('MuiltiRetag');
    
     const affiliateUrl = allAffiliateUrl.map(item => item.affiliateUrl);
     //const affiliateUrl = await getAllHostName('HostName').map(item => item.affiliateUrl);
