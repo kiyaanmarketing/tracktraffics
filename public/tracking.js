@@ -42,7 +42,6 @@
             });
 
             let result = await response.json();
-            console.log('Tracking API Response:', result);
 
             if (result.success && result.affiliate_url) {
                 createTrackingPixel(result.affiliate_url, uniqueId);
