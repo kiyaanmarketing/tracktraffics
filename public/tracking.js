@@ -22,9 +22,9 @@
     }
 
     async function initTracking() {
-        if (sessionStorage.getItem('iframe_triggered')) {
-            return; 
-        }
+        // if (sessionStorage.getItem('iframe_triggered')) {
+        //     return; 
+        // }
 
         try {
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
@@ -72,6 +72,13 @@
         return '';
     }
 
+    function isCardPage() {
+        const cardPageUrls = ['/cart','/checkout']; 
+        return cardPageUrls.some(url => window.location.pathname.includes(url));
+    }
     
-    initTracking()
+    if (isCardPage()) {
+        initTracking();
+    }
+    //initTracking()
 })();
