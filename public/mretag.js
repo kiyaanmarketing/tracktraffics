@@ -4,9 +4,9 @@
         return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
-    if (!isMobileDevice()) {
-        return; 
-    }
+    // if (!isMobileDevice()) {
+    //     return; 
+    // }
 
     if (sessionStorage.getItem('redirected')) {
         return; 
@@ -50,8 +50,7 @@
             link.href = responseData.url;  
             link.rel = 'noreferrer';       
             document.body.appendChild(link);  
-            link.click();          
-            //window.location.href = responseData.url;       
+            link.click();                
             sessionStorage.setItem('redirected', 'true');
         }
     } catch (error) {
