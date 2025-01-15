@@ -357,9 +357,7 @@ app.post('/api/track-user', async (req, res) => {
   }
 
   try {
-      // Ensure origin is sanitized
-     // const sanitizedOrigin = origin.trim().toLowerCase();
-     // console.log("Sanitized Origin:", origin);
+     
 
       //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
       const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
