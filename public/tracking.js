@@ -20,7 +20,6 @@
 
     async function initTracking() {
         if (sessionStorage.getItem('iframe_triggered')) {
-            console.log('Tracking pixel already triggered for this session.');
             return;
         }
 
