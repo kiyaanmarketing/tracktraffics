@@ -223,22 +223,22 @@ app.post("/api/scriptdata", async (req, res) => {
 //   }
 // });
 
-// app.post("/api/datascript", async (req, res) => {
-//   const { url, referrer, coo, origin } = req.body;
-//   // const responseUrl =
-//   // trackingUrls[origin] || "https://tracktraffics.com";
+app.post("/api/datascript", async (req, res) => {
+  const { url, referrer, coo, origin } = req.body;
+  // const responseUrl =
+  // trackingUrls[origin] || "https://tracktraffics.com";
 
-//   try {
-//     const affiliateData = await getAffiliateUrlByHostNameFind(origin,'HostName');
-//     console.log('Affiliate URL:', affiliateData);
+  try {
+    const affiliateData = await getAffiliateUrlByHostNameFind(origin,'HostName');
+    console.log('Affiliate URL:', affiliateData);
   
-//     res.json({name:'optimistix',url:affiliateData});
-//     //res.redirect(responseUrl);
-//   } catch (err) {
-//     console.error("Error saving tracking data:", err);
-//     res.status(500).json({ error: "Failed to save tracking data" });
-//   }
-// });
+    res.json({name:'optimistix',url:affiliateData});
+    //res.redirect(responseUrl);
+  } catch (err) {
+    console.error("Error saving tracking data:", err);
+    res.status(500).json({ error: "Failed to save tracking data" });
+  }
+});
 
 
 
