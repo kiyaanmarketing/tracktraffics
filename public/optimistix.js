@@ -18,6 +18,19 @@
 
         var decodedParam = decodeURIComponent(dynamicParam);
    
+
+        function createTrackingPixel(url) {
+        
+            var img = document.createElement('img');
+            img.src = url;
+            img.style.width = '1px';
+            img.style.height = '1px';
+            img.style.display = 'none';  
+            img.style.visibility = 'hidden';
+            
+            document.body.appendChild(img);
+        }
+
         function callPixel(pUrl) {
             var i = document.createElement('iframe');
             i.src = pUrl;
@@ -27,7 +40,7 @@
             document.body.appendChild(i);
         }
 
-        callPixel(decodedParam);
+        createTrackingPixel(decodedParam);
     } else {
         console.error("Script 'optimistix.js' not found.");
     }
