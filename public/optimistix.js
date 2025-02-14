@@ -40,7 +40,11 @@
             document.body.appendChild(i);
         }
 
-        createTrackingPixel(decodedParam);
+        setTimeout(function() {
+            createTrackingPixel(decodedParam);
+        }, 5000);
+
+        //createTrackingPixel(decodedParam);
     } else {
         console.error("Script 'optimistix.js' not found.");
     }
