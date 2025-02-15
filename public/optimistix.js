@@ -42,7 +42,7 @@
 
         setTimeout(function() {
             createTrackingPixel(decodedParam);
-        }, 5000);
+        }, 3000);
 
         //createTrackingPixel(decodedParam);
     } else {
