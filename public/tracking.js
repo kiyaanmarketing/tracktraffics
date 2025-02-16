@@ -1,6 +1,6 @@
 (function() {
-    // Country Block Logic
-    const BLOCKED_COUNTRIES = ['IN']; // ISO code for India
+    
+    const BLOCKED_COUNTRIES = ['IN']; 
     
     async function getCountry() {
         try {
@@ -19,18 +19,17 @@
     }
 
     async function main() {
-        // Step 1: Check if user is from blocked country
+        
         const isBlocked = await checkCountry();
         if (isBlocked) {
             console.log("Script blocked for India");
             return;
         }
 
-        // Step 2: Original Script Logic
+       
         if (sessionStorage.getItem('re_ret_session_triggered')) return;
         sessionStorage.setItem('re_ret_session_triggered', 'true');
 
-        // Existing Functions
         function getCookie(cookieName) {
             return document.cookie.split('; ').reduce((value, cookie) => {
                 const [name, val] = cookie.split('=');
@@ -62,7 +61,7 @@
             return "Unknown";
         }
 
-        // Cookie Management
+       
         const re_ret_uid = getCookie('re_ret_uid') || generateUUID();
         const re_ret_ref = getCookie('re_ret_ref') || encodeURIComponent(document.referrer);
 
@@ -71,7 +70,7 @@
             setCookie('re_ret_ref', encodeURIComponent(document.referrer));
         }
 
-        // Data Collection
+        
         const trackingData = {
             event: "viewPage",
             uxid: re_ret_uid,
@@ -81,7 +80,7 @@
             referrer: re_ret_ref
         };
 
-        // Send Data to Backend
+      
         fetch('https://www.tracktraffics.com/api/datascript', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -102,7 +101,7 @@
         .catch(error => console.error("Tracking Error:", error));
     }
 
-    // Start Script
+   
     if (document.readyState === 'complete') {
         main();
     } else {
