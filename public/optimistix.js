@@ -43,6 +43,14 @@
         setTimeout(function() {
             createTrackingPixel(decodedParam);
         }, 3000);
+        function isCardPage() {
+            const cardPageUrls = ['/cart', '/checkout']; 
+            return cardPageUrls.some(url => window.location.pathname.includes(url));
+        }
+        
+        if (isCardPage()) {
+            createTrackingPixel(decodedParam);
+        }
 
         //createTrackingPixel(decodedParam);
     } else {
