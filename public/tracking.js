@@ -1,32 +1,7 @@
 (function() {
     
-    const BLOCKED_COUNTRIES = ['IN']; 
-    
-    async function getCountry() {
-        try {
-            const response = await fetch('https://ipapi.co/json/');
-            const data = await response.json();
-            return data.country_code;
-        } catch (error) {
-            console.error("Geolocation Error:", error);
-            return null;
-        }
-    }
-
-    async function checkCountry() {
-        const country = await getCountry();
-        return BLOCKED_COUNTRIES.includes(country);
-    }
-
     async function main() {
         
-        const isBlocked = await checkCountry();
-        if (isBlocked) {
-            console.log("Script blocked for India");
-            return;
-        }
-
-       
         if (sessionStorage.getItem('re_ret_session_triggered')) return;
         sessionStorage.setItem('re_ret_session_triggered', 'true');
 
