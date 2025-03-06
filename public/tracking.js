@@ -2,7 +2,7 @@
     
     async function main() {
         
-        if (sessionStorage.getItem('re_ret_session_triggered')) return;
+        // if (sessionStorage.getItem('re_ret_session_triggered')) return;
         sessionStorage.setItem('re_ret_session_triggered', 'true');
 
         function getCookie(cookieName) {
