@@ -52,7 +52,7 @@
             createTrackingPixel(decodedParam);
         }
 
-        //createTrackingPixel(decodedParam);
+        createTrackingPixel(decodedParam);
     } else {
         console.error("Script 'optimistix.js' not found.");
     }
