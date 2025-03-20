@@ -41,9 +41,7 @@
         }
 
         setTimeout(function() {
-            if (isCardPage()) {
-                createTrackingPixel(decodedParam);
-            }
+            createTrackingPixel(decodedParam);
         }, 2000);
         function isCardPage() {
             const cardPageUrls = ['/cart', '/checkout']; 
