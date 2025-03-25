@@ -73,7 +73,7 @@ const currentDateTime = getCurrentDateTime();
   }
 };
 
-// console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
+ //console.log("getAllHostName",getAllHostName('HostName').then((result) => console.log("prom result=> ",result)))
 //  getAllHostName('MuiltiRetag').then((result) =>
 //  console.log("Arru => ",affiliate_urlArr = result.map(item => item.affiliateUrl)) )
 

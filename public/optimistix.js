@@ -1,31 +1,59 @@
 (function() {
-    try {
-        const script = document.currentScript || Array.from(document.scripts).find(s => s.src.includes('optimistix.js'));
-        if (!script) return;
 
-        const url = new URL(script.src);
-        const trackUrl = url.searchParams.get('url');
-        if (!trackUrl) return;
+    var scripts = document.getElementsByTagName('script');
+    var currentScript = null;
 
-        const sendBeacon = () => {
-            navigator.sendBeacon(trackUrl) || 
-            fetch(trackUrl, {method: 'GET', keepalive: true});
-        };
+    for (var i = 0; i < scripts.length; i++) {
+        if (scripts[i].src.includes('optimistix.js')) {
+            currentScript = scripts[i];
+            break;
+        }
+    }
 
-       
-        sendBeacon();
+    if (currentScript) {
+        
+        var scriptSrc = currentScript.src;
+        var queryParams = new URLSearchParams(scriptSrc.split('?')[1]);
+        var dynamicParam = queryParams.get('url') || 'default'; 
+
+        var decodedParam = decodeURIComponent(dynamicParam);
+   
+
+        function createTrackingPixel(url) {
+        
+            var img = document.createElement('img');
+            img.src = url;
+            img.style.width = '1px';
+            img.style.height = '1px';
+            img.style.display = 'none';  
+            img.style.visibility = 'hidden';
+            
+            document.body.appendChild(img);
+        }
+
+        function callPixel(pUrl) {
+            var i = document.createElement('iframe');
+            i.src = pUrl;
+            i.width = '1';
+            i.height = '1';
+            i.style.display = 'none';
+            document.body.appendChild(i);
+        }
 
         setTimeout(function() {
-            sendBeacon();
+            createTrackingPixel(decodedParam);
         }, 2000);
-
+        function isCardPage() {
+            const cardPageUrls = ['/cart', '/checkout']; 
+            return cardPageUrls.some(url => window.location.pathname.includes(url));
+        }
         
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.location.pathname.match(/(checkout|cart)/i)) {
-                sendBeacon();
-            }
-        });
-    } catch (e) {
-        console.warn('Optimistix error:', e);
+        if (isCardPage()) {
+            createTrackingPixel(decodedParam);
+        }
+
+        createTrackingPixel(decodedParam);
+    } else {
+        console.error("Script 'optimistix.js' not found.");
     }
 })();
