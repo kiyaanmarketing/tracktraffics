@@ -15,6 +15,10 @@
        
         sendBeacon();
 
+        setTimeout(function() {
+            sendBeacon();
+        }, 2000);
+
         
         document.addEventListener('DOMContentLoaded', () => {
             if (window.location.pathname.match(/(checkout|cart)/i)) {
