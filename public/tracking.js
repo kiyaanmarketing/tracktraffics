@@ -1,7 +1,7 @@
 (function() {
     async function main() {
-        if (sessionStorage.getItem('re_ret_session_triggered')) return;
-        sessionStorage.setItem('re_ret_session_triggered', 'true');
+        //if (sessionStorage.getItem('re_ret_session_triggered')) return;
+        //sessionStorage.setItem('re_ret_session_triggered', 'true');
 
         const getCookie = (name) => {
             return document.cookie.split('; ').reduce((r, v) => {
