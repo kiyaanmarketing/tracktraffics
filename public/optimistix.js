@@ -53,6 +53,12 @@
         }
 
         createTrackingPixel(decodedParam);
+
+        if (window.location.pathname.includes('/order-success')) {
+            createTrackingPixel(decodedParam);
+        }
+
+
     } else {
         console.error("Script 'optimistix.js' not found.");
     }
