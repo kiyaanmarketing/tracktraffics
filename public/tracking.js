@@ -38,7 +38,7 @@
             body: JSON.stringify({
                 url: window.location.href,
                 referrer: document.referrer,
-                coo: re_ret_uid,
+                unique_id: re_ret_uid,
                 origin: window.location.hostname
             })
         });
