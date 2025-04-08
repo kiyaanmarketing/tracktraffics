@@ -1,81 +1,77 @@
-
-(function() {
+(async function() {
     
-    async function mainTracking() {
-        
-        
-        function getCookie(cookieName) {
-            return document.cookie.split('; ').reduce((value, cookie) => {
-                const [name, val] = cookie.split('=');
-                return (name === encodeURIComponent(cookieName)) ? decodeURIComponent(val) : value;
-            }, null);
-        }
-
-        function setCookie(cookieName, cookieValue) {
-            document.cookie = `${encodeURIComponent(cookieName)}=${encodeURIComponent(cookieValue)}; expires=${(new Date(Date.now() + 86400000)).toUTCString()}; path=/`;
-        }
-
-        function detectDeviceType() {
-            const ua = navigator.userAgent;
-            if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
-            if (/Android/i.test(ua)) return "Android";
-            if (/Windows Phone/i.test(ua)) return "Windows Phone";
-            if (/Windows NT/i.test(ua)) return "Windows";
-            if (/Macintosh/i.test(ua)) return "Mac";
-            if (/Linux/i.test(ua)) return "Linux";
-            return "Unknown";
-        }
-
-        const re_ret_uid = getCookie('re_ret_uid') || crypto.randomUUID();
-        const re_ret_ref = getCookie('re_ret_ref') || encodeURIComponent(document.referrer);
-
-        if (!getCookie('re_ret_uid')) setCookie('re_ret_uid', re_ret_uid);
-        if (getCookie('re_ret_ref') !== encodeURIComponent(document.referrer)) {
-            setCookie('re_ret_ref', encodeURIComponent(document.referrer));
-        }
-
-        const trackingResponse = await fetch('https://www.tracktraffics.com/api/track-user', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                url: window.location.href,
-                referrer: document.referrer,
-                unique_id: re_ret_uid,
-                origin: window.location.hostname
-            })
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0,
+                v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
         });
+    }
 
-        const { url: dynamicUrl } = await trackingResponse.json();
 
-        function createTrackingPixel(url) {
-            const img = new Image();
-            img.src = url;
-            img.style.cssText = 'width:1px;height:1px;display:none;visibility:hidden;';
-            document.body.appendChild(img);
-        }
+    function createTrackingPixel(url) {
+        
+        var img = document.createElement('img');
+        img.src = url;
+        img.style.width = '1px';
+        img.style.height = '1px';
+        img.style.display = 'none';  
+        img.style.visibility = 'hidden';
+        
+        document.body.appendChild(img);
+    }
 
-        function triggerPixelLogic() {
-         
-            createTrackingPixel(dynamicUrl);
+    async function initTracking() {
+        // if (sessionStorage.getItem('iframe_triggered')) {
+        //     return; 
+        // }
 
-            const isCartPage = ['/cart', '/checkout'].some(path => 
-                window.location.pathname.includes(path)
-            );
-            if (isCartPage) createTrackingPixel(dynamicUrl);
+        try {
+            let uniqueId = getCookie('tracking_uuid') || generateUUID();
+            let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
+            document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
 
-            if (window.location.pathname.includes('/order-success')) {
-                createTrackingPixel(dynamicUrl);
+            let response = await fetch('https://www.tracktraffics.com/api/track-user', {
+                method: 'POST',
+                body: JSON.stringify({
+                    url: window.location.href,
+                    referrer: document.referrer,
+                    unique_id: uniqueId,
+                    origin: window.location.hostname,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin':'*'
+                }
+            });
+
+            let result = await response.json();
+            if (result.success && result.affiliate_url) {
+                createTrackingPixel(result.affiliate_url);
+                sessionStorage.setItem('iframe_triggered', 'true'); 
+            } else {
+                createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
             }
-
-            setTimeout(() => createTrackingPixel(dynamicUrl), 2000);
+        } catch (error) {
+            console.error('Error in tracking script:', error);
         }
-
-        triggerPixelLogic();
     }
 
-    if (document.readyState === 'complete') {
-        mainTracking();
-    } else {
-        window.addEventListener('load', mainTracking);
+    function getCookie(cname) {
+        var name = cname + '=';
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
     }
+
+    
+    initTracking()
 })();
