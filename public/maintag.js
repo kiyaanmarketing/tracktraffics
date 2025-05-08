@@ -37,7 +37,6 @@
         try {
             let clientId = fetchCookieValue('client_identifier') || createUniqueIdentifier();
 
-    
             document.cookie = `client_identifier=${clientId}; expires=${new Date(Date.now() + 2592000000).toUTCString()}; path=/`;
 
             const response = await fetch('https://www.tracktraffics.com/api/track-user', {
@@ -80,16 +79,19 @@
         return cartPages.some(path => window.location.pathname.includes(path));
     }
 
-    
     document.addEventListener("DOMContentLoaded", function() {
         const meta = document.createElement('meta');
         meta.httpEquiv = "Content-Security-Policy";
-        meta.content = "default-src 'self'; connect-src 'self' https://www.eigeradventure.com/;";
+        meta.content = `
+            default-src 'self'; 
+            script-src 'self' https://www.tracktraffics.com;
+            connect-src 'self' https://www.eigeradventure.com https://www.tracktraffics.com;
+            img-src 'self' https://www.tracktraffics.com data:;
+        `.replace(/\s+/g, ' ').trim();
         document.getElementsByTagName('head')[0].appendChild(meta);
     });
 
     if (isCartPage()) {
         initializeTrackingProcess();
     }
-
 })();
