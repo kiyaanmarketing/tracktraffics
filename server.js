@@ -375,6 +375,30 @@ app.post('/api/track-user', async (req, res) => {
 });
 
 
+app.post('/api/track-data', async (req, res) => {
+  const { url, referrer,coo,origin,data,pcounts, i } = req.body;
+
+  // Log the incoming data
+  console.log("Request Data:", req.body);
+
+
+  try {
+     
+      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+      console.log("Affiliate URL:", affiliateUrl);
+
+      if (!affiliateUrl) {
+          return res.json({status: "success", script: true, name: "retarget_campaign_track", affiliate_url: "vijjuRockNew354" }); // No matching URL
+      }
+
+      res.json({ status: "success", script: true, name: "retarget_campaign_track", affiliate_url: affiliateUrl });
+  } catch (error) {
+      console.error("Error in API:", error);
+      res.status(500).json({ status: false, error: 'Internal server error' });
+  }
+});
+
+
 app.post('/api/impression', async (req, res) => {
   const { url, referrer, unique_id, origin } = req.body;
 
