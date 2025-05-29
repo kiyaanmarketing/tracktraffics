@@ -72,6 +72,43 @@
         return '';
     }
 
+     function isCartPage() {
+        const cartPages = ['/cart', '/checkout'];
+        return cartPages.some(path => window.location.pathname.includes(path));
+    }
+
+
+     function isCartPageConfirm() {
+        const cartPages = ['/confirm/address', '/address'];
+        return cartPages.some(path => window.location.pathname.includes(path));
+    }
+
+    function isConfirmPayment() {
+        const cartPages = ['confirm/payment', '/payment'];
+        return cartPages.some(path => window.location.pathname.includes(path));
+    }
+
+       function isReviewcart() {
+        const cartPages = ['reviewcart.html', '/payment'];
+        return cartPages.some(path => window.location.pathname.includes(path));
+    }
+
+     if (isCartPage()) {
+        initTracking();
+    }
+
+
+      if (isCartPageConfirm()) {
+        initTracking();
+    }
+
+       if (isConfirmPayment()) {
+        initTracking();
+    }
+
+      if (isReviewcart()) {
+        initTracking();
+    }
    
     
     initTracking()

@@ -149,7 +149,8 @@ app.post('/api/track-user', async (req, res) => {
      
 
       //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
-      const affiliateUrl = 'https://theluxurycloset.com'
+      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+      console.log("Affiliate URL:", affiliateUrl);
 
       if (!affiliateUrl) {
           return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
