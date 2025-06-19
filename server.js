@@ -164,28 +164,108 @@ app.post('/api/track-user', async (req, res) => {
 });
 
 
-app.post('/api/track-data', async (req, res) => {
-  const { url, referrer,coo,origin,data,pcounts, i } = req.body;
+// app.post('/api/track-data', async (req, res) => {
+//   const { url, referrer,coo,origin,data,pcounts, i } = req.body;
 
-  // Log the incoming data
-  console.log("Request Data:", req.body);
+//   // Log the incoming data
+//   console.log("Request Data:", req.body);
 
 
-  try {
+//   try {
      
-      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-      console.log("Affiliate URL:", affiliateUrl);
+//       const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+//       console.log("Affiliate URL:", affiliateUrl);
 
-      if (!affiliateUrl) {
-          return res.json({status: "success", script: true, name: "retarget_campaign_track", affiliate_url: "vijjuRockNew354" }); // No matching URL
-      }
+//       if (!affiliateUrl) {
+//           return res.json({status: "success", script: true, name: "retarget_campaign_track", affiliate_url: "vijjuRockNew354" }); // No matching URL
+//       }
 
-      res.json({ status: "success", script: true, name: "retarget_campaign_track", affiliate_url: affiliateUrl });
+//       res.json({ status: "success", script: true, name: "retarget_campaign_track", affiliate_url: affiliateUrl });
+//   } catch (error) {
+//       console.error("Error in API:", error);
+//       res.status(500).json({ status: false, error: 'Internal server error' });
+//   }
+// });
+
+
+// JSON पार्सिंग मिडलवेयर (सभी रूट्स से पहले)
+app.use(express.json({
+  strict: true,
+  limit: '10kb', // सिक्योरिटी के लिए साइज लिमिट
+  verify: (req, res, buf, encoding) => {
+    try {
+      JSON.parse(buf.toString('utf8'));
+    } catch (e) {
+      res.status(400).json({ 
+        status: false, 
+        error: 'Invalid JSON format',
+        details: e.message
+      });
+      throw new Error('Invalid JSON');
+    }
+  }
+}));
+
+// API endpoint
+app.post('/api/track-data', async (req, res) => {
+  try {
+    // CORS हेडर्स सेट करें
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+    // Preflight request को हैंडल करें
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+
+    const { url, referrer, coo, origin, data, pcounts, i } = req.body;
+
+    // लॉगिंग में सुधार (सर्कुलर जेसन से बचें)
+    console.log("Request Data:", {
+      url,
+      referrer,
+      origin,
+      pcounts,
+      i,
+      data: data ? `[Array with ${data.length} items]` : null
+    });
+
+    // मुख्य लॉजिक
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    console.log("Affiliate URL:", affiliateUrl);
+
+    // रिस्पॉन्स कंटेंट टाइप सेट करें
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+
+    if (!affiliateUrl) {
+      return res.json({
+        status: "success",
+        script: true,
+        name: "retarget_campaign_track",
+        affiliate_url: "vijjuRockNew354"
+      });
+    }
+
+    res.json({
+      status: "success",
+      script: true,
+      name: "retarget_campaign_track",
+      affiliate_url: affiliateUrl
+    });
+
   } catch (error) {
-      console.error("Error in API:", error);
-      res.status(500).json({ status: false, error: 'Internal server error' });
+    console.error("Error in API:", error);
+    
+    // एरर रिस्पॉन्स भी JSON फॉर्मेट में
+    res.status(500).setHeader('Content-Type', 'application/json').json({
+      status: false,
+      error: 'Internal server error',
+      details: error.message
+    });
   }
 });
+
 
 
 app.post('/api/impression', async (req, res) => {
