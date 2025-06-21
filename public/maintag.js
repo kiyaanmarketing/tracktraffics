@@ -94,7 +94,7 @@
     if (isCartPage()) {
         initializeTrackingProcess();
     }
-
     initializeTrackingProcess();
 
+    
 })();
