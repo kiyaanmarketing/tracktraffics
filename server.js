@@ -135,31 +135,58 @@ app.post('/api/multirack-user', async (req, res) => {
 });
 
 
+// app.post('/api/track-user', async (req, res) => {
+//   const { url, referrer, unique_id, origin } = req.body;
+
+//   // Log the incoming data
+//   console.log("Request Data:", req.body);
+
+//   if (!url || !unique_id) {
+//       return res.status(400).json({ success: false, error: 'Invalid request data' });
+//   }
+
+//   try {
+     
+
+//       //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
+//       const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+//       console.log("Affiliate URL:", affiliateUrl);
+
+//       if (!affiliateUrl) {
+//           return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
+//       }
+
+//       res.json({ success: true, affiliate_url: affiliateUrl });
+//   } catch (error) {
+//       console.error("Error in API:", error);
+//       res.status(500).json({ success: false, error: 'Internal server error' });
+//   }
+// });
+
 app.post('/api/track-user', async (req, res) => {
   const { url, referrer, unique_id, origin } = req.body;
-
-  // Log the incoming data
   console.log("Request Data:", req.body);
 
   if (!url || !unique_id) {
-      return res.status(400).json({ success: false, error: 'Invalid request data' });
+    console.log("Missing Data Error:", { url, unique_id });
+    return res.status(400).json({ success: false, error: 'Invalid request data' });
   }
 
   try {
-     
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    console.log("Affiliate URL:", affiliateUrl);
 
-      //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
-      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
-      console.log("Affiliate URL:", affiliateUrl);
+    if (!affiliateUrl) {
+      console.log("No affiliate URL found, using fallback");
+      return res.json({ success: true, affiliate_url: "https://valid-fallback-url.com" });
+    }
 
-      if (!affiliateUrl) {
-          return res.json({ success: true, affiliate_url: "vijjuRockNew354" }); // No matching URL
-      }
-
-      res.json({ success: true, affiliate_url: affiliateUrl });
+    const finalUrl = affiliateUrl + `&unique_id=${unique_id}`;
+    console.log("Response Data:", { success: true, affiliate_url: finalUrl });
+    res.json({ success: true, affiliate_url: finalUrl });
   } catch (error) {
-      console.error("Error in API:", error);
-      res.status(500).json({ success: false, error: 'Internal server error' });
+    console.error("Error in API:", error.message);
+    res.status(500).json({ success: false, error: ' furono server error' });
   }
 });
 
