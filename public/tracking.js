@@ -33,18 +33,13 @@
   }
 
   async function initTracking() {
-    if (sessionStorage.getItem('iframe_triggered')) {
-      console.log("Tracking already triggered in this session");
-      return;
-    }
-
     try {
       let uniqueId = getCookie('tracking_uuid');
       if (!uniqueId) {
         uniqueId = localStorage.getItem('tracking_uuid') || generateUUID();
         localStorage.setItem('tracking_uuid', uniqueId);
       }
-      let expires = (new Date(Date.now() + 60 * 86400 * 1000)).toUTCString(); // 60 din
+      let expires = (new Date(Date.now() + 60 * 86400 * 1000)).toUTCString();
       document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;domain=.theviewpalm.ae;';
 
       let response = await fetch('https://www.tracktraffics.com/api/track-user', {
@@ -64,7 +59,6 @@
       let result = await response.json();
       if (result.success && result.affiliate_url) {
         createTrackingPixel(result.affiliate_url);
-        sessionStorage.setItem('iframe_triggered', 'true');
       } else {
         createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
       }
@@ -83,5 +77,6 @@
   }
 
   const debouncedInitTracking = debounce(initTracking, 300);
-  debouncedInitTracking();
+  window.triggerTracking = debouncedInitTracking;
+  debouncedInitTracking(); 
 })();
