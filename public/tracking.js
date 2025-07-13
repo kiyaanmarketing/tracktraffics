@@ -76,7 +76,7 @@
     };
   }
 
-  const debouncedInitTracking = debounce(initTracking, 300);
-  window.triggerTracking = debouncedInitTracking;
-  debouncedInitTracking(); 
+  //const debouncedInitTracking = debounce(initTracking, 300);
+  window.triggerTracking = initTracking;
+  initTracking()
 })();
