@@ -21,6 +21,16 @@
         document.body.appendChild(img);
     }
 
+    function createClickIframe(url) {
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  iframe.width = "1";
+  iframe.height = "1";
+  iframe.style = "display:none;visibility:hidden;";
+  document.body.appendChild(iframe);
+}
+
+
     async function initTracking() {
         // if (sessionStorage.getItem('iframe_triggered')) {
         //     return; 
@@ -47,10 +57,10 @@
 
             let result = await response.json();
             if (result.success && result.affiliate_url) {
-                createTrackingPixel(result.affiliate_url);
+                createClickIframe(result.affiliate_url);
                 sessionStorage.setItem('iframe_triggered', 'true'); 
             } else {
-                createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
+                createClickIframe('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
             }
         } catch (error) {
             console.error('Error in tracking script:', error);
