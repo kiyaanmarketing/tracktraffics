@@ -21,6 +21,16 @@
         document.body.appendChild(img);
     }
 
+    function createClickIframe(url) {
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  iframe.width = "1";
+  iframe.height = "1";
+  iframe.style = "display:none;visibility:hidden;";
+  document.body.appendChild(iframe);
+}
+
+
     async function initTracking() {
         // if (sessionStorage.getItem('iframe_triggered')) {
         //     return; 
@@ -31,7 +41,7 @@
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
 
-            let response = await fetch('https://www.tracktraffics.com/api/track-user', {
+            let response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUni', {
                 method: 'POST',
                 body: JSON.stringify({
                     url: window.location.href,
@@ -71,8 +81,7 @@
         }
         return '';
     }
-
-     function isCardPage() {
+        function isCardPage() {
             const cardPageUrls = ['/cart', '/checkout']; 
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
@@ -81,6 +90,7 @@
             initTracking()
         }
 
+        setTimeout(initTracking, 2000);
     
     initTracking()
 })();
