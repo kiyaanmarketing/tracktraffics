@@ -10,7 +10,7 @@
 
 
     function createTrackingPixel(url) {
-        
+        console.log("Enter url vjp......")
         var img = document.createElement('img');
         img.src = url;
         img.style.width = '1px';
@@ -92,5 +92,5 @@
 
         //setTimeout(initTracking, 2000);
     
-    //initTracking()
+    initTracking()
 })();
