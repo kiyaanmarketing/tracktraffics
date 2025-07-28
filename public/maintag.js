@@ -8,6 +8,25 @@
         });
     }
 
+
+     function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  const clickId = getQueryParam('irclickid');
+
+  if (clickId) {
+    
+    document.cookie = `irclickid=${clickId}; path=/; max-age=${30 * 24 * 60 * 60}`;
+  }
+
+  
+  if (clickId) {
+    localStorage.setItem('irclickid', clickId);
+  }
+
+
     const urlNew = new URL(window.location.href);
   const utm_source = urlNew.searchParams.get("utm_source") || "";
   const utm_campaign = urlNew.searchParams.get("utm_campaign") || "";
