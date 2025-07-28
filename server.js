@@ -139,6 +139,19 @@ app.post('/api/multirack-user', async (req, res) => {
 });
 
 
+app.get('/api/mypayloads', async (req, res) => {
+  try {
+    const db = getDB();
+    const payloadCollection = db.collection('Payloads');
+    const data = await payloadCollection.find({}).sort({ timestamp: -1 }).limit(5000).toArray();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error fetching payloads:", error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
+
 
 app.post('/api/track-user-withoutUniData', async (req, res) => {
   const { url, referrer, unique_id, origin, payload } = req.body;
@@ -151,20 +164,27 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
 
   try {
     // ✅ Check and save payload only if origin is www.mysteriumvpn.com
-    if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
-      const existingData = fs.existsSync(PAYLOAD_FILE)
-        ? JSON.parse(fs.readFileSync(PAYLOAD_FILE, 'utf8'))
-        : [];
+  if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
+  const db = getDB();
+  const payloadCollection = db.collection('Payloads');
 
-      if (existingData.length < MAX_RECORDS) {
-        existingData.push({ timestamp: new Date().toISOString(), payload });
+  // Optional: limit to 5000 documents
+  const count = await payloadCollection.countDocuments();
+  if (count < MAX_RECORDS) {
+    await payloadCollection.insertOne({
+      timestamp: new Date(),
+      origin,
+      payload,
+      unique_id,
+      url,
+      referrer,
+    });
+    console.log(`✅ Payload stored in MongoDB. Total records: ${count + 1}`);
+  } else {
+    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+  }
+}
 
-        fs.writeFileSync(PAYLOAD_FILE, JSON.stringify(existingData, null, 2), 'utf8');
-        console.log(`Payload stored. Total records: ${existingData.length}`);
-      } else {
-        console.log('Max 5000 payloads already stored. Skipping write.');
-      }
-    }
 
     const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
     console.log("Affiliate URL:", affiliateUrl);
