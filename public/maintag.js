@@ -8,6 +8,28 @@
         });
     }
 
+    const urlNew = new URL(window.location.href);
+  const utm_source = url.searchParams.get("utm_source") || "";
+  const utm_campaign = url.searchParams.get("utm_campaign") || "";
+  const utm_medium = url.searchParams.get("utm_medium") || "";
+  const referrer = document.referrer;
+  const screenResolution = `${window.screen.width}x${window.screen.height}`;
+  const userAgent = navigator.userAgent;
+  const timestamp = new Date().toISOString();
+
+const payload = {
+    utm_source,
+    utm_campaign,
+    utm_medium,
+    referrer,
+    screenResolution,
+    userAgent,
+    timestamp,
+    page: window.location.href,
+  };
+
+
+
 
     function createTrackingPixel(url) {
         console.log("Enter url vjp......")
@@ -41,13 +63,14 @@
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
 
-            let response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUni', {
+            let response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUniData', {
                 method: 'POST',
                 body: JSON.stringify({
                     url: window.location.href,
                     referrer: document.referrer,
                     unique_id: uniqueId,
                     origin: window.location.hostname,
+                    payload,
                 }),
                 headers: {
                     'Content-Type': 'application/json',

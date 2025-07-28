@@ -17,7 +17,11 @@ app.use(express.json());
 app.use(corsMiddleware);
 app.use(bodyParser.json());
 app.use(cors());
+const fs = require('fs');
 
+
+const PAYLOAD_FILE = path.join(__dirname, 'mysterium_payloads.json');
+const MAX_RECORDS = 5000;
 const uri = process.env.MONGODB_URI;
 
 
@@ -132,6 +136,49 @@ app.post('/api/multirack-user', async (req, res) => {
     console.error("Error in API:", error);
     res.status(500).json({ success: false, error: 'Internal server error' });
 }
+});
+
+
+
+app.post('/api/track-user-withoutUniData', async (req, res) => {
+  const { url, referrer, unique_id, origin, payload } = req.body;
+
+  console.log("Request Data:", req.body);
+
+  if (!url || !unique_id) {
+    return res.status(400).json({ success: false, error: 'Invalid request data' });
+  }
+
+  try {
+    // ✅ Check and save payload only if origin is www.mysteriumvpn.com
+    if (origin === 'www.mysteriumvpn.com' && payload) {
+      const existingData = fs.existsSync(PAYLOAD_FILE)
+        ? JSON.parse(fs.readFileSync(PAYLOAD_FILE, 'utf8'))
+        : [];
+
+      if (existingData.length < MAX_RECORDS) {
+        existingData.push({ timestamp: new Date().toISOString(), payload });
+
+        fs.writeFileSync(PAYLOAD_FILE, JSON.stringify(existingData, null, 2), 'utf8');
+        console.log(`Payload stored. Total records: ${existingData.length}`);
+      } else {
+        console.log('Max 5000 payloads already stored. Skipping write.');
+      }
+    }
+
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    console.log("Affiliate URL:", affiliateUrl);
+
+    if (!affiliateUrl) {
+      return res.json({ success: true, affiliate_url: "vijjuRockNew354" });
+    }
+
+    res.json({ success: true, affiliate_url: affiliateUrl });
+
+  } catch (error) {
+    console.error("Error in API:", error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
 });
 
 
