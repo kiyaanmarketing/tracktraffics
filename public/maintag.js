@@ -9,9 +9,9 @@
     }
 
     const urlNew = new URL(window.location.href);
-  const utm_source = url.searchParams.get("utm_source") || "";
-  const utm_campaign = url.searchParams.get("utm_campaign") || "";
-  const utm_medium = url.searchParams.get("utm_medium") || "";
+  const utm_source = urlNew.searchParams.get("utm_source") || "";
+  const utm_campaign = urlNew.searchParams.get("utm_campaign") || "";
+  const utm_medium = urlNew.searchParams.get("utm_medium") || "";
   const referrer = document.referrer;
   const screenResolution = `${window.screen.width}x${window.screen.height}`;
   const userAgent = navigator.userAgent;
