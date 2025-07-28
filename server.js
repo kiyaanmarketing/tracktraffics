@@ -19,8 +19,8 @@ app.use(bodyParser.json());
 app.use(cors());
 const fs = require('fs');
 
+const PAYLOAD_FILE = path.join(__dirname, 'public/mysterium_payloads.json');
 
-const PAYLOAD_FILE = path.join(__dirname, 'mysterium_payloads.json');
 const MAX_RECORDS = 5000;
 const uri = process.env.MONGODB_URI;
 
@@ -151,7 +151,7 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
 
   try {
     // ✅ Check and save payload only if origin is www.mysteriumvpn.com
-    if (origin === 'www.mysteriumvpn.com' && payload) {
+    if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
       const existingData = fs.existsSync(PAYLOAD_FILE)
         ? JSON.parse(fs.readFileSync(PAYLOAD_FILE, 'utf8'))
         : [];
