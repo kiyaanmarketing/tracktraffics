@@ -77,6 +77,11 @@ const payload = {
         if (sessionStorage.getItem('iframe_triggered')) {
             return; 
         }
+         if (!clickId) {
+ 
+        console.log('No clickId found. Tracking script will not run.');
+         return;
+  }
 
         try {
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
