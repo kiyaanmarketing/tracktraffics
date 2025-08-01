@@ -74,9 +74,9 @@ const payload = {
 
 
     async function initTracking() {
-        if (sessionStorage.getItem('iframe_triggered')) {
-            return; 
-        }
+        // if (sessionStorage.getItem('iframe_triggered')) {
+        //     return; 
+        // }
          if (!clickId) {
  
         console.log('No clickId found. Tracking script will not run.');
