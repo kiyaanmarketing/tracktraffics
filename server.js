@@ -152,6 +152,20 @@ app.get('/api/mypayloads', async (req, res) => {
 });
 
 
+app.get('/api/mytheviewpalm', async (req, res) => {
+  try {
+    const db = getDB();
+    const payloadCollection = db.collection('theviewpalm');
+    const data = await payloadCollection.find({}).sort({ timestamp: -1 }).limit(5000).toArray();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error fetching payloads:", error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
+
+
 
 app.post('/api/track-user-withoutUniData', async (req, res) => {
   const { url, referrer, unique_id, origin, payload } = req.body;
@@ -180,6 +194,28 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
       referrer,
     });
     console.log(`✅ Payload stored in MongoDB. Total records: ${count + 1}`);
+  } else {
+    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+  }
+}
+
+
+  if ((origin.includes("booking.theviewpalm.ae") || origin.includes("booking.theviewpalm.ae")) && payload) {
+  const db = getDB();
+  const payloadCollection = db.collection('theviewpalm');
+
+  // Optional: limit to 5000 documents
+  const count = await payloadCollection.countDocuments();
+  if (count < MAX_RECORDS) {
+    await payloadCollection.insertOne({
+      timestamp: new Date(),
+      origin,
+      payload,
+      unique_id,
+      url,
+      referrer,
+    });
+    console.log(`✅ Payload theviewpalm stored in MongoDB. Total records: ${count + 1}`);
   } else {
     console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
   }
