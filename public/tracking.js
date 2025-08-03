@@ -27,7 +27,7 @@ const payload = {
     userAgent,
     timestamp,
     page: window.location.href,
-    clickId,
+    
   };
 
 
