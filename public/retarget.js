@@ -83,13 +83,13 @@
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
-        if (isCardPage()) {
-             console.log("reta_vsp 87 => ")
-            initTracking()
-            setTimeout(initTracking, 2000);
-        }
+    //     if (isCardPage()) {
+    //          console.log("reta_vsp 87 => ")
+    //         initTracking()
+    //         setTimeout(initTracking, 2000);
+    //     }
 
-        setTimeout(initTracking, 2000);
+    //     setTimeout(initTracking, 2000);
     
-    initTracking()
+    // initTracking()
 })();
