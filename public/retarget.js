@@ -91,5 +91,5 @@
 
     //     setTimeout(initTracking, 2000);
     
-    // initTracking()
+     initTracking()
 })();
