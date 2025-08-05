@@ -10,7 +10,7 @@
 
 
     function createTrackingPixel(url) {
-        
+        console.log("reta_vsp 13 => ",url)
         var img = document.createElement('img');
         img.src = url;
         img.style.width = '1px';
@@ -50,8 +50,8 @@
              console.log("reta_vsp result 50 => ", result)
             if (result.success && result.affiliate_url) {
                 console.log("reta_vsp 52 => ",result.affiliate_url)
-                 window.location.href = result.affiliate_url;
-                //createTrackingPixel(result.affiliate_url);
+                 //window.location.href = result.affiliate_url;
+                createTrackingPixel(result.affiliate_url);
                 sessionStorage.setItem('iframe_triggered', 'true'); 
             } else {
                 console.log("reta_vsp 57 => ")
