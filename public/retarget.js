@@ -22,10 +22,10 @@
     }
 
     async function initTracking() {
-        if (sessionStorage.getItem('iframe_triggered')) {
-             console.log("reta_vsp 26 => Already visit this page")
-            return; 
-        }
+        // if (sessionStorage.getItem('iframe_triggered')) {
+        //      console.log("reta_vsp 26 => Already visit this page")
+        //     return; 
+        // }
 
         try {
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
