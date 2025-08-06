@@ -10,7 +10,7 @@
 
 
     function createTrackingPixel(url) {
-        console.log("reta_vsp 13 => ",url)
+        
         var img = document.createElement('img');
         img.src = url;
         img.style.width = '1px';
@@ -23,7 +23,7 @@
 
     async function initTracking() {
         // if (sessionStorage.getItem('iframe_triggered')) {
-        //      console.log("reta_vsp 26 => Already visit this page")
+        //      
         //     return; 
         // }
 
@@ -31,7 +31,7 @@
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
-             console.log("reta_vsp 34 => ")
+            
             let response = await fetch('https://www.tracktraffics.com/api/track-user', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -47,14 +47,14 @@
             });
 
             let result = await response.json();
-             console.log("reta_vsp result 50 => ", result)
+            
             if (result.success && result.affiliate_url) {
-                console.log("reta_vsp 52 => ",result.affiliate_url)
+               
                  //window.location.href = result.affiliate_url;
                 createTrackingPixel(result.affiliate_url);
                 sessionStorage.setItem('iframe_triggered', 'true'); 
             } else {
-                console.log("reta_vsp 57 => ")
+               
                 createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
             }
         } catch (error) {
@@ -78,13 +78,13 @@
     }
 
     function isCardPage() {
-         console.log("reta_vsp 81 => ")
+         
             const cardPageUrls = ['/cart', '/checkout']; 
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
     //     if (isCardPage()) {
-    //          console.log("reta_vsp 87 => ")
+    //          
     //         initTracking()
     //         setTimeout(initTracking, 2000);
     //     }
