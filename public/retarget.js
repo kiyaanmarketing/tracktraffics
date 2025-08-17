@@ -94,6 +94,8 @@
         if (isCardPage()) {
              
             initTracking()
+            setTimeout(initTracking, 2000);
+            setTimeout(initTracking, 2000);
             
         }
 
