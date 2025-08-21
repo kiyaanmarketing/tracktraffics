@@ -238,6 +238,76 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
 });
 
 
+app.post('/api/track-user-withoutUniDatavpn', async (req, res) => {
+  const { url, referrer, unique_id, origin, payload } = req.body;
+
+  console.log("Request Data:", req.body);
+
+  if (!url || !unique_id) {
+    return res.status(400).json({ success: false, error: 'Invalid request data' });
+  }
+
+  try {
+    // ✅ Check and save payload only if origin is www.mysteriumvpn.com
+  if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
+  const db = getDB();
+  const payloadCollection = db.collection('Payloads');
+
+  // Optional: limit to 5000 documents
+  const count = await payloadCollection.countDocuments();
+  if (count < MAX_RECORDS) {
+    await payloadCollection.insertOne({
+      timestamp: new Date(),
+      origin,
+      payload,
+      unique_id,
+      url,
+      referrer,
+    });
+    console.log(`✅ Payload stored in MongoDB. Total records: ${count + 1}`);
+  } else {
+    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+  }
+}
+
+
+  if ((origin.includes("booking.theviewpalm.ae") || origin.includes("booking.theviewpalm.ae")) && payload) {
+  const db = getDB();
+  const payloadCollection = db.collection('theviewpalm');
+
+  // Optional: limit to 5000 documents
+  const count = await payloadCollection.countDocuments();
+  if (count < MAX_RECORDS) {
+    await payloadCollection.insertOne({
+      timestamp: new Date(),
+      origin,
+      payload,
+      unique_id,
+      url,
+      referrer,
+    });
+    console.log(`✅ Payload theviewpalm stored in MongoDB. Total records: ${count + 1}`);
+  } else {
+    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+  }
+}
+
+
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    console.log("Affiliate URL:", affiliateUrl);
+
+    if (!affiliateUrl) {
+      return res.json({ success: true, affiliate_url: "vijjuRockNew354" , faffiliate_url: "vijjuRock" });
+    }
+
+    res.json({ success: true, affiliate_url: affiliateUrl,faffiliate_url:"https://www.tracktraffics.com/custom-logic.js" });
+
+  } catch (error) {
+    console.error("Error in API:", error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
+});
+
 app.post('/api/track-user-withoutUni', async (req, res) => {
   const { url, referrer, unique_id, origin } = req.body;
 
