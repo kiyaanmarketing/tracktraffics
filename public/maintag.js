@@ -52,7 +52,7 @@ const payload = {
     })
      let result = await response.json();
             
-
+    
 
     if (result.affiliate_url) {
       const iframe = document.createElement("iframe");
