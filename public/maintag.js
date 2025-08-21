@@ -25,6 +25,10 @@ const payload = {
   };
 
   try {
+
+    let uniqueId = getCookie('tracking_uuid_vpn') || generateUUID();
+            let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
+            document.cookie = 'tracking_uuid_vpn=' + uniqueId + '; expires=' + expires + ';path=/;';
    
     const response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUniDatavpn', {
       method: "POST",
