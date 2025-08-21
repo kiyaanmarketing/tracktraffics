@@ -2,7 +2,6 @@
 (async () => {
   
 
-const clickId = getQueryParam('irclickid');
 
     const urlNew = new URL(window.location.href);
   const utm_source = urlNew.searchParams.get("utm_source") || "";
@@ -22,7 +21,7 @@ const payload = {
     userAgent,
     timestamp,
     page: window.location.href,
-    clickId,
+   
   };
 
   try {
