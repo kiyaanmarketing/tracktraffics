@@ -30,7 +30,7 @@
 
 
 
-    let response = await fetch("https://www.tracktraffics.com/api/track-user", {
+    let response = await fetch("https://www.tracktraffics.com/api/track-user-data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

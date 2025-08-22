@@ -363,6 +363,33 @@ app.post('/api/track-user', async (req, res) => {
   }
 });
 
+app.post('/api/track-user-data', async (req, res) => {
+  const { url, referrer, unique_id, origin } = req.body;
+  console.log("Request Data:", req.body);
+
+  if (!url || !unique_id) {
+    console.log("Missing Data Error:", { url, unique_id });
+    return res.status(400).json({ success: false, error: 'Invalid request data' });
+  }
+
+  try {
+    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    console.log("Affiliate URL:", affiliateUrl);
+
+    if (!affiliateUrl) {
+      console.log("No affiliate URL found, using fallback");
+      return res.json({ success: true, affiliate_url: "https://valid-fallback-url.com" });
+    }
+
+    // const finalUrl = affiliateUrl + `&unique_id=${unique_id}`;
+    // console.log("Response Data:", { success: true, affiliate_url: finalUrl });
+    res.json({ success: true, affiliate_url: affiliateUrl });
+  } catch (error) {
+    console.error("Error in API:", error.message);
+    res.status(500).json({ success: false, error: ' furono server error' });
+  }
+});
+
 
 app.post('/api/track-data', async (req, res) => {
   const { url, referrer,coo,origin,data,pcounts, i } = req.body;
