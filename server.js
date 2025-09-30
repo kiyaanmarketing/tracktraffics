@@ -70,6 +70,22 @@ const getAffiliateUrlByHostNameFind = async (hostname, collectionName) => {
   }
 };
 
+const getAffiliateUrlByHostNameFindActive = async (hostname, collectionName) => {
+  const db = getDB();
+  
+  try {
+    const result = await db.collection(collectionName)
+                          .findOne({ 
+                            hostname: hostname, 
+                            status: "active"  // <-- only active hosts
+                          });
+    return result ? result.affiliateUrl : '';
+  } catch (error) {
+    console.error('MongoDB Error:', error);
+    return '';
+  }
+};
+
 
 
 
@@ -79,7 +95,7 @@ app.post("/api/scriptdata", async (req, res) => {
 
   try {
     
-    const responseUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+    const responseUrl = await getAffiliateUrlByHostNameFindActive(origin,'HostNameN');
     console.log('Affiliate URL:', responseUrl);
     res.json({ url: responseUrl });
    
@@ -96,7 +112,7 @@ app.post("/api/datascript", async (req, res) => {
   const { url, referrer, coo, origin } = req.body;
 
   try {
-    const affiliateData = await getAffiliateUrlByHostNameFind(origin,'HostName');
+    const affiliateData = await getAffiliateUrlByHostNameFindActive(origin,'HostNameN');
     console.log('Affiliate URL:', affiliateData);
   
     res.json({name:'optimistix',url:affiliateData});
@@ -222,7 +238,7 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
 }
 
 
-    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
     console.log("Affiliate URL:", affiliateUrl);
 
     if (!affiliateUrl) {
@@ -293,7 +309,7 @@ app.post('/api/track-user-withoutUniDatavpn', async (req, res) => {
 }
 
 
-    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
     console.log("Affiliate URL:", affiliateUrl);
 
     if (!affiliateUrl) {
@@ -322,7 +338,7 @@ app.post('/api/track-user-withoutUni', async (req, res) => {
      
 
       //const affiliateUrl = trackingUrls[sanitizedOrigin] || "vijjuRockNew";
-      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+      const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin,'HostNameN');
       console.log("Affiliate URL:", affiliateUrl);
 
       if (!affiliateUrl) {
@@ -346,7 +362,7 @@ app.post('/api/track-user', async (req, res) => {
   }
 
   try {
-    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
     console.log("Affiliate URL:", affiliateUrl);
 
     if (!affiliateUrl) {
@@ -373,7 +389,7 @@ app.post('/api/track-user-data', async (req, res) => {
   }
 
   try {
-    const affiliateUrl = await getAffiliateUrlByHostNameFind(origin, 'HostName');
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
     console.log("Affiliate URL:", affiliateUrl);
 
     if (!affiliateUrl) {
@@ -400,7 +416,7 @@ app.post('/api/track-data', async (req, res) => {
 
   try {
      
-      const affiliateUrl = await getAffiliateUrlByHostNameFind(origin,'HostName');
+      const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin,'HostNameN');
       console.log("Affiliate URL:", affiliateUrl);
 
       if (!affiliateUrl) {
