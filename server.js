@@ -356,7 +356,7 @@ app.post('/api/track-user', async (req, res) => {
   const { url, referrer, unique_id, origin } = req.body;
   console.log("Request Data:", req.body);
 
-  if (!url || !unique_id) {
+  if (!unique_id) {
     console.log("Missing Data Error:", { url, unique_id });
     return res.status(400).json({ success: false, error: 'Invalid request data' });
   }
