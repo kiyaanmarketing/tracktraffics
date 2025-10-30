@@ -26,8 +26,8 @@
         iframe.src = url;
         iframe.width = "1";
         iframe.height = "1";
-        iframe.style.display = "none";
-        iframe.style.visibility = "hidden";
+        //iframe.style.display = "none";
+        //iframe.style.visibility = "hidden";
         document.body.appendChild(iframe);
     }
 
