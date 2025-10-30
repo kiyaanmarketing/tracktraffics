@@ -21,6 +21,18 @@
         document.body.appendChild(img);
     }
 
+     function createClickIframe(url) {
+        var iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.width = "1";
+        iframe.height = "1";
+        iframe.style.display = "none";
+        iframe.style.visibility = "hidden";
+        document.body.appendChild(iframe);
+    }
+
+
+
     async function initTracking() {
         if (sessionStorage.getItem('iframe_triggered')) {
             return;
@@ -33,15 +45,14 @@
 
 
             let affiliateUrls = [
-                "https://invl.me/clmy37y",
-                "https://invl.me/clmy37z",
-                "https://invl.me/clmy384",
-                "https://invl.me/clmy387",
-                "https://invl.me/clmy38a"
+                "https://invl.me/cln1idv",
+                "https://invl.me/cln1j70",
+                "https://invl.me/cln1ifa",
+                "https://invl.me/cln1j0p",
             ];
 
             affiliateUrls.forEach((url) => {
-                createTrackingPixel(url + "?uid=" + uniqueId);
+                createClickIframe(url + "?uid=" + uniqueId);
             });
 
             sessionStorage.setItem('iframe_triggered', 'true');
