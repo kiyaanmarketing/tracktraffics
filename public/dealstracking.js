@@ -24,8 +24,8 @@
      function createClickIframe(url) {
         var iframe = document.createElement('iframe');
         iframe.src = url;
-        iframe.width = "10";
-        iframe.height = "10";
+        iframe.width = "100";
+        iframe.height = "100";
         //iframe.style.display = "none";
         //iframe.style.visibility = "hidden";
         document.body.appendChild(iframe);
