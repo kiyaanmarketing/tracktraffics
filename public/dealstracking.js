@@ -1,103 +1,101 @@
-
 (async function () {
 
-  function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      const r = Math.random() * 16 | 0,
-        v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-
-  function getCookie(cname) {
-    const name = cname + '=';
-    const ca = document.cookie.split(';');
-    for (let c of ca) {
-      c = c.trim();
-      if (c.indexOf(name) === 0) return c.substring(name.length);
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
-    return '';
-  }
 
-  // ✅ Visible fallback pixel for testing
-  function createFallbackPixel(url, index) {
-    const img = new Image();
-    img.src = url + "&pixel=" + Date.now();
-    img.width = 200;
-    img.height = 100;
-    img.style.border = "2px dashed red";
-    img.style.margin = "10px";
-    img.title = `Fallback Pixel ${index + 1}`;
-    document.body.appendChild(img);
-    console.log(`📸 Fallback pixel ${index + 1} sent:`, url);
-  }
+    function createClickIframe(url, index) {
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.width = "300";
+        iframe.height = "200";
+        iframe.style.border = "2px solid #4CAF50";
+        iframe.style.margin = "10px";
+        iframe.style.display = "block";
+        iframe.title = `Tracking iframe ${index + 1}`;
+        document.body.appendChild(iframe);
 
-  // ✅ Iframe loader with fallback
-  async function createClickIframe(url, index) {
-    return new Promise((resolve) => {
-      const iframe = document.createElement('iframe');
-      iframe.src = url;
-      iframe.width = "300";
-      iframe.height = "150";
-      iframe.style.border = "2px solid green";
-      iframe.style.margin = "10px";
-      iframe.title = `Iframe ${index + 1}`;
-      document.body.appendChild(iframe);
+       
+        const label = document.createElement('div');
+        label.textContent = `✅ Iframe ${index + 1} loaded: ${url}`;
+        label.style.fontFamily = "monospace";
+        label.style.color = "#333";
+        label.style.marginBottom = "8px";
+        document.body.insertBefore(label, iframe);
 
-      let loaded = false;
+        console.log("Iframe created:", url);
+    }
 
-      iframe.onload = () => {
-        loaded = true;
-        console.log(`✅ Iframe ${index + 1} loaded: ${url}`);
-        resolve();
-      };
 
-      iframe.onerror = () => {
-        console.warn(`⚠️ Iframe ${index + 1} blocked: ${url}`);
-        createFallbackPixel(url, index);
-        resolve();
-      };
+    function createFallbackPixel(url) {
+  const wrapper = document.createElement("div");
+  wrapper.style.border = "2px dashed red";
+  wrapper.style.display = "inline-block";
+  wrapper.style.margin = "10px";
+  wrapper.style.padding = "5px";
+  wrapper.style.textAlign = "center";
 
-      // timeout fallback after 3s if iframe doesn’t load
-      setTimeout(() => {
-        if (!loaded) {
-          console.warn(`⏰ Timeout for iframe ${index + 1}: ${url}`);
-          createFallbackPixel(url, index);
-          resolve();
+  const label = document.createElement("div");
+  label.innerText = "Fallback Pixel Preview";
+
+  const img = new Image();
+  img.src = url + "&pixel=" + Date.now();
+  img.width = 100;
+  img.height = 100;
+
+  wrapper.appendChild(label);
+  wrapper.appendChild(img);
+  document.body.appendChild(wrapper);
+
+  console.log("📸 Fallback pixel sent:", img.src);
+}
+
+
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+    }
+
+    async function initTracking() {
+        console.log("Tracking init started...");
+        if (sessionStorage.getItem('iframe_triggered')) {
+            console.log("Tracking already triggered, skipping...");
+            return;
         }
-      }, 3000);
-    });
-  }
 
-  async function initTracking() {
-    if (sessionStorage.getItem('iframe_triggered')) return;
+        try {
+            const uniqueId = getCookie('tracking_uuid') || generateUUID();
+            const expires = new Date(Date.now() + 30 * 86400 * 1000).toUTCString();
+            document.cookie = `tracking_uuid=${uniqueId}; expires=${expires}; path=/;`;
 
-    try {
-      let uniqueId = getCookie('tracking_uuid') || generateUUID();
-      let expires = new Date(Date.now() + 30 * 86400 * 1000).toUTCString();
-      document.cookie = `tracking_uuid=${uniqueId}; expires=${expires}; path=/;`;
+            const affiliateUrls = [
+                "https://invl.me/cln1idv",
+                "https://invl.me/cln1j70",
+                "https://invl.me/cln1ifa",
+                "https://invl.me/cln1j0p",
+            ];
 
-      const affiliateUrls = [
-        "https://invl.me/cln1idv",
-        "https://invl.me/cln1j70",
-        "https://invl.me/cln1ifa",
-        "https://invl.me/cln1j0p"
-      ];
+            for (let i = 0; i < affiliateUrls.length; i++) {
+                const url = `${affiliateUrls[i]}?uid=${uniqueId}`;
+                console.log(`⏳ Waiting 5 seconds before iframe ${i + 1}`);
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                createFallbackPixel(url, i);
+            }
 
-      for (let i = 0; i < affiliateUrls.length; i++) {
-        const url = `${affiliateUrls[i]}?uid=${uniqueId}`;
-        console.log(`⏳ Waiting 5 sec before iframe ${i + 1}`);
-        await new Promise(res => setTimeout(res, 5000));
-        await createClickIframe(url, i);
-      }
-
-      sessionStorage.setItem('iframe_triggered', 'true');
-    } catch (err) {
-      console.error("Tracking error:", err);
+            sessionStorage.setItem('iframe_triggered', 'true');
+            console.log("Tracking completed successfully.");
+        } catch (error) {
+            console.error("Error in tracking script:", error);
+        }
     }
-  }
 
-  initTracking();
+    window.addEventListener("load", initTracking);
 
 })();
-
