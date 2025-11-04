@@ -110,7 +110,7 @@ const payload = {
         }
         
         if (isCardPage()) {
-            initTracking()
+            
             setTimeout(initTracking, 500);
         }
 
