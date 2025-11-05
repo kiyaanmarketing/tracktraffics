@@ -92,18 +92,12 @@
         return '';
     }
 
-    function isCartPage() {
-            
-        const cartPages = ["/cart", "/checkout","/checkout/shipping","/checkout/cart","/shopping-cart"];
-        return cartPages.some(path => window.location.pathname.includes(path));
-    }
-
-    if (isCartPage()) {
-        initTracking();
-    }
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+  initTracking();
+} else {
+  window.addEventListener("DOMContentLoaded", initTracking);
+}
 
 
-    //initTracking();
-    //setTimeout(initTracking, 2000);
-    window.addEventListener("DOMContentLoaded", initTracking);
+  
 })();
