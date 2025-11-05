@@ -109,13 +109,17 @@ const payload = {
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
-        if (isCardPage()) {
-            
-            setTimeout(initTracking, 500);
-        }
 
-        // setTimeout(initTracking, 2000);
-        initTracking()
-    
-    window.addEventListener("DOMContentLoaded", initTracking);
+        if (referrer && referrer.trim() !== "") {
+            if (isCardPage()) {
+                setTimeout(initTracking, 500);
+        }
+            initTracking();
+            window.addEventListener("DOMContentLoaded", initTracking);
+    } else {
+        console.log("Tracking skipped: referrer is blank.");
+    }
+
+
+
 })();
