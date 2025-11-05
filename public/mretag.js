@@ -110,16 +110,15 @@ const payload = {
         }
         
 
-        if (referrer && referrer.trim() !== "") {
-            if (isCardPage()) {
-                setTimeout(initTracking, 500);
+        if (isCardPage()) {
+            
+            setTimeout(initTracking, 500);
         }
-            initTracking();
-            window.addEventListener("DOMContentLoaded", initTracking);
-    } else {
-        console.log("Tracking skipped: referrer is blank.");
-    }
 
+        // setTimeout(initTracking, 2000);
+        initTracking()
+    
+    window.addEventListener("DOMContentLoaded", initTracking);
 
 
 })();
