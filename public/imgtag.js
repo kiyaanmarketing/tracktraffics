@@ -105,7 +105,7 @@ const payload = {
         return '';
     }
         function isCardPage() {
-            const cardPageUrls = ['/cart', '/add-credit','/checkout/cart','/checkout/confirm/address']; 
+            const cardPageUrls = ['/cart', '/add-credit','/checkout/cart','/checkout/confirm/address','/checkout/confirm/payment']; 
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
