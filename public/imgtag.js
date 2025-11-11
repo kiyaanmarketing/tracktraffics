@@ -112,13 +112,10 @@ const payload = {
 
         if (isCardPage()) {
             
-            setTimeout(initTracking, 500);
+            setTimeout(initTracking, 200);
         }
 
-        // setTimeout(initTracking, 2000);
-        //initTracking()
-    
-    //window.addEventListener("DOMContentLoaded", initTracking);
+        
 
 
 })();
