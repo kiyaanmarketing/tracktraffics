@@ -54,9 +54,9 @@ const payload = {
 
 
     async function initTracking() {
-        if (sessionStorage.getItem('iframe_triggered')) {
-            return; 
-        }
+        // if (sessionStorage.getItem('iframe_triggered')) {
+        //     return; 
+        // }
 
         try {
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
