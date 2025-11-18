@@ -92,6 +92,16 @@
         return '';
     }
 
+     function isCardPage() {
+            const cardPageUrls = ['/cart', '/checkout','/subscribe/stripe/checkout','/subscribe/stripe']; 
+            return cardPageUrls.some(url => window.location.pathname.includes(url));
+        }
+        
+        if (isCardPage()) {
+            initTracking()
+        }
+
+
   if (document.readyState === "complete" || document.readyState === "interactive") {
   initTracking();
 } else {
