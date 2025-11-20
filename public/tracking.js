@@ -111,9 +111,27 @@ const payload = {
         
         if (isCardPage()) {
             initTracking()
+            initTracking()
         }
 
-        //setTimeout(initTracking, 2000);
+              function callInitTracking(maxTimes, delay) {
+  let count = 0;
+
+  function run() {
+    if (count < maxTimes) {
+      initTracking();
+      count++;
+      setTimeout(run, delay);
+    }
+  }
+
+  run(); 
+}
+
+
+callInitTracking(2, 2000); 
+
     
-    //initTracking()
+    
+     initTracking()
 })();
