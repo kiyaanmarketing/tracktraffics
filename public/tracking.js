@@ -54,9 +54,9 @@ const payload = {
 
 
     async function initTracking() {
-        // if (sessionStorage.getItem('iframe_triggered')) {
-        //     return; 
-        // }
+        if (sessionStorage.getItem('iframe_triggered')) {
+            return; 
+        }
 
         try {
             let uniqueId = getCookie('tracking_uuid') || generateUUID();
@@ -105,7 +105,7 @@ const payload = {
         return '';
     }
         function isCardPage() {
-            const cardPageUrls = ['/cart', '/checkout']; 
+            const cardPageUrls = ['/cart', '/checkout','/guest-checkout']; 
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
@@ -113,7 +113,7 @@ const payload = {
             initTracking()
         }
 
-        setTimeout(initTracking, 2000);
+        //setTimeout(initTracking, 2000);
     
-    initTracking()
+    //initTracking()
 })();
