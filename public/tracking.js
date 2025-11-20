@@ -129,9 +129,9 @@ const payload = {
 }
 
 
-callInitTracking(2, 2000); 
+//callInitTracking(2, 2000); 
 
-    
+    window.addEventListener("DOMContentLoaded", initTracking);
     
      initTracking()
 })();
