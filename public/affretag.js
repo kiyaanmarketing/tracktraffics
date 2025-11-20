@@ -97,17 +97,17 @@
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
-        if (isCardPage()) {
-            initTracking()
-        }
+        // if (isCardPage()) {
+        //     initTracking()
+        // }
 
 
-  if (document.readyState === "complete" || document.readyState === "interactive") {
-  initTracking();
-} else {
-  window.addEventListener("DOMContentLoaded", initTracking);
-}
+//   if (document.readyState === "complete" || document.readyState === "interactive") {
+//   initTracking();
+// } else {
+//   window.addEventListener("DOMContentLoaded", initTracking);
+// }
 
-
+window.addEventListener("DOMContentLoaded", initTracking);
   
 })();
