@@ -103,7 +103,7 @@
 
         }
 
-        setTimeout(initTracking, 2000);
-
-     initTracking()
+        //setTimeout(initTracking, 2000);
+        window.addEventListener("DOMContentLoaded", initTracking);
+     //initTracking()
 })();
