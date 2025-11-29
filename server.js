@@ -155,31 +155,70 @@ app.post('/api/multirack-user', async (req, res) => {
 });
 
 
-app.get('/api/mypayloads', async (req, res) => {
+// app.get('/api/mypayloads', async (req, res) => {
+//   try {
+//     const db = getDB();
+//     const payloadCollection = db.collection('Payloads');
+//     const data = await payloadCollection.find({}).sort({ timestamp: -1 }).limit(5000).toArray();
+//     res.json({ success: true, data });
+//   } catch (error) {
+//     console.error("Error fetching payloads:", error);
+//     res.status(500).json({ success: false, error: 'Internal server error' });
+//   }
+// });
+
+
+// app.get('/api/mytheviewpalm', async (req, res) => {
+//   try {
+//     const db = getDB();
+//     const payloadCollection = db.collection('theviewpalm');
+//     const data = await payloadCollection.find({}).sort({ timestamp: -1 }).limit(5000).toArray();
+//     res.json({ success: true, data });
+//   } catch (error) {
+//     console.error("Error fetching payloads:", error);
+//     res.status(500).json({ success: false, error: 'Internal server error' });
+//   }
+// });
+
+// ===============================
+// 🔥 Dynamic GET API (single route)
+// ===============================
+app.get('/api/get', async (req, res) => {
   try {
+    const { collection } = req.query;
+
+    // Validate collection name
+    if (!collection) {
+      return res.status(400).json({ success: false, error: "collection query required" });
+    }
+
+    // Allowed collections (SECURITY)
+    const allowedCollections = [
+      "mypayloads",
+      "mytheviewpalm",
+      "fareastflora",
+      "xcite"
+    ];
+
+    if (!allowedCollections.includes(collection)) {
+      return res.status(400).json({ success: false, error: "Invalid collection name" });
+    }
+
     const db = getDB();
-    const payloadCollection = db.collection('Payloads');
-    const data = await payloadCollection.find({}).sort({ timestamp: -1 }).limit(5000).toArray();
-    res.json({ success: true, data });
+    const payloadCollection = db.collection(collection);
+
+    // Fetch all data – sorted by latest
+    const data = await payloadCollection.find({})
+      .sort({ timestamp: -1 })
+      .toArray();
+
+    res.json({ success: true, collection, count: data.length, data });
+
   } catch (error) {
-    console.error("Error fetching payloads:", error);
+    console.error("Dynamic GET Error:", error);
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
-
-
-app.get('/api/mytheviewpalm', async (req, res) => {
-  try {
-    const db = getDB();
-    const payloadCollection = db.collection('theviewpalm');
-    const data = await payloadCollection.find({}).sort({ timestamp: -1 }).limit(5000).toArray();
-    res.json({ success: true, data });
-  } catch (error) {
-    console.error("Error fetching payloads:", error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
-  }
-});
-
 
 
 
@@ -301,6 +340,44 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
 
       console.log(`✅ Stored theviewpalm payload`);
     }
+
+  // =============================
+    // 2️⃣ Store for www.fareastflora.com
+    // =============================
+    if ((origin.includes("www.fareastflora.com")) && payload) {
+      const payloadCollection = db.collection('fareastflora');
+
+      await payloadCollection.insertOne({
+        timestamp: new Date(),
+        origin,
+        payload,
+        unique_id,
+        url,
+        referrer,
+      });
+
+      console.log(`✅ Stored fareastflora payload`);
+    }
+
+// =============================
+    // 2️⃣ Store for www.xcite.com
+    // =============================
+    if ((origin.includes("www.xcite.com")) && payload) {
+      const payloadCollection = db.collection('xcite');
+
+      await payloadCollection.insertOne({
+        timestamp: new Date(),
+        origin,
+        payload,
+        unique_id,
+        url,
+        referrer,
+      });
+
+      console.log(`✅ Stored xcite payload`);
+    }
+
+
 
     // =============================
     // 3️⃣ Send Affiliate URL
