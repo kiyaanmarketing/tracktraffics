@@ -183,6 +183,77 @@ app.get('/api/mytheviewpalm', async (req, res) => {
 
 
 
+// app.post('/api/track-user-withoutUniData', async (req, res) => {
+//   const { url, referrer, unique_id, origin, payload } = req.body;
+
+//   console.log("Request Data:", req.body);
+
+//   if (!url || !unique_id) {
+//     return res.status(400).json({ success: false, error: 'Invalid request data' });
+//   }
+
+//   try {
+//     // ✅ Check and save payload only if origin is www.mysteriumvpn.com
+//   if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
+//   const db = getDB();
+//   const payloadCollection = db.collection('Payloads');
+
+//   // Optional: limit to 5000 documents
+//   const count = await payloadCollection.countDocuments();
+//   if (count < MAX_RECORDS) {
+//     await payloadCollection.insertOne({
+//       timestamp: new Date(),
+//       origin,
+//       payload,
+//       unique_id,
+//       url,
+//       referrer,
+//     });
+//     console.log(`✅ Payload stored in MongoDB. Total records: ${count + 1}`);
+//   } else {
+//     console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+//   }
+// }
+
+
+//   if ((origin.includes("booking.theviewpalm.ae") || origin.includes("booking.theviewpalm.ae")) && payload) {
+//   const db = getDB();
+//   const payloadCollection = db.collection('theviewpalm');
+
+//   // Optional: limit to 5000 documents
+//   const count = await payloadCollection.countDocuments();
+//   if (count < MAX_RECORDS) {
+//     await payloadCollection.insertOne({
+//       timestamp: new Date(),
+//       origin,
+//       payload,
+//       unique_id,
+//       url,
+//       referrer,
+//     });
+//     console.log(`✅ Payload theviewpalm stored in MongoDB. Total records: ${count + 1}`);
+//   } else {
+//     console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+//   }
+// }
+
+
+//     const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
+//     console.log("Affiliate URL:", affiliateUrl);
+
+//     if (!affiliateUrl) {
+//       return res.json({ success: true, affiliate_url: "vijjuRockNew354" });
+//     }
+
+//     res.json({ success: true, affiliate_url: affiliateUrl });
+
+//   } catch (error) {
+//     console.error("Error in API:", error);
+//     res.status(500).json({ success: false, error: 'Internal server error' });
+//   }
+// });
+
+
 app.post('/api/track-user-withoutUniData', async (req, res) => {
   const { url, referrer, unique_id, origin, payload } = req.body;
 
@@ -193,51 +264,47 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
   }
 
   try {
-    // ✅ Check and save payload only if origin is www.mysteriumvpn.com
-  if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
-  const db = getDB();
-  const payloadCollection = db.collection('Payloads');
+    const db = getDB();
 
-  // Optional: limit to 5000 documents
-  const count = await payloadCollection.countDocuments();
-  if (count < MAX_RECORDS) {
-    await payloadCollection.insertOne({
-      timestamp: new Date(),
-      origin,
-      payload,
-      unique_id,
-      url,
-      referrer,
-    });
-    console.log(`✅ Payload stored in MongoDB. Total records: ${count + 1}`);
-  } else {
-    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
-  }
-}
+    // =============================
+    // 1️⃣ Store for mysteriumvpn.com
+    // =============================
+    if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
+      const payloadCollection = db.collection('Payloads');
 
+      await payloadCollection.insertOne({
+        timestamp: new Date(),
+        origin,
+        payload,
+        unique_id,
+        url,
+        referrer,
+      });
 
-  if ((origin.includes("booking.theviewpalm.ae") || origin.includes("booking.theviewpalm.ae")) && payload) {
-  const db = getDB();
-  const payloadCollection = db.collection('theviewpalm');
+      console.log(`✅ Stored mysterium payload`);
+    }
 
-  // Optional: limit to 5000 documents
-  const count = await payloadCollection.countDocuments();
-  if (count < MAX_RECORDS) {
-    await payloadCollection.insertOne({
-      timestamp: new Date(),
-      origin,
-      payload,
-      unique_id,
-      url,
-      referrer,
-    });
-    console.log(`✅ Payload theviewpalm stored in MongoDB. Total records: ${count + 1}`);
-  } else {
-    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
-  }
-}
+    // =============================
+    // 2️⃣ Store for theviewpalm
+    // =============================
+    if ((origin.includes("booking.theviewpalm.ae")) && payload) {
+      const payloadCollection = db.collection('theviewpalm');
 
+      await payloadCollection.insertOne({
+        timestamp: new Date(),
+        origin,
+        payload,
+        unique_id,
+        url,
+        referrer,
+      });
 
+      console.log(`✅ Stored theviewpalm payload`);
+    }
+
+    // =============================
+    // 3️⃣ Send Affiliate URL
+    // =============================
     const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
     console.log("Affiliate URL:", affiliateUrl);
 
@@ -252,6 +319,8 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
     res.status(500).json({ success: false, error: 'Internal server error' });
   }
 });
+
+
 
 
 app.post('/api/track-user-withoutUniDatavpn', async (req, res) => {
