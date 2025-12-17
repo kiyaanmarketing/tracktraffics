@@ -108,6 +108,8 @@
   window.addEventListener("DOMContentLoaded", initTracking);
 }
 
+    initTracking();
+
 //window.addEventListener("DOMContentLoaded", initTracking);
   
 })();
