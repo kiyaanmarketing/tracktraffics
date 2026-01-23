@@ -308,74 +308,74 @@ app.post('/api/track-user-withoutUniData', async (req, res) => {
     // =============================
     // 1️⃣ Store for mysteriumvpn.com
     // =============================
-    if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
-      const payloadCollection = db.collection('Payloads');
+    // if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
+    //   const payloadCollection = db.collection('Payloads');
 
-      await payloadCollection.insertOne({
-        timestamp: new Date(),
-        origin,
-        payload,
-        unique_id,
-        url,
-        referrer,
-      });
+    //   await payloadCollection.insertOne({
+    //     timestamp: new Date(),
+    //     origin,
+    //     payload,
+    //     unique_id,
+    //     url,
+    //     referrer,
+    //   });
 
-      console.log(`✅ Stored mysterium payload`);
-    }
+    //   console.log(`✅ Stored mysterium payload`);
+    // }
 
     // =============================
     // 2️⃣ Store for theviewpalm
     // =============================
-    if ((origin.includes("booking.theviewpalm.ae")) && payload) {
-      const payloadCollection = db.collection('theviewpalm');
+    // if ((origin.includes("booking.theviewpalm.ae")) && payload) {
+    //   const payloadCollection = db.collection('theviewpalm');
 
-      await payloadCollection.insertOne({
-        timestamp: new Date(),
-        origin,
-        payload,
-        unique_id,
-        url,
-        referrer,
-      });
+    //   await payloadCollection.insertOne({
+    //     timestamp: new Date(),
+    //     origin,
+    //     payload,
+    //     unique_id,
+    //     url,
+    //     referrer,
+    //   });
 
-      console.log(`✅ Stored theviewpalm payload`);
-    }
+    //   console.log(`✅ Stored theviewpalm payload`);
+    // }
 
   // =============================
     // 2️⃣ Store for www.fareastflora.com
     // =============================
-    if ((origin.includes("www.fareastflora.com")) && payload) {
-      const payloadCollection = db.collection('fareastflora');
+    // if ((origin.includes("www.fareastflora.com")) && payload) {
+    //   const payloadCollection = db.collection('fareastflora');
 
-      await payloadCollection.insertOne({
-        timestamp: new Date(),
-        origin,
-        payload,
-        unique_id,
-        url,
-        referrer,
-      });
+    //   await payloadCollection.insertOne({
+    //     timestamp: new Date(),
+    //     origin,
+    //     payload,
+    //     unique_id,
+    //     url,
+    //     referrer,
+    //   });
 
-      console.log(`✅ Stored fareastflora payload`);
-    }
+    //   console.log(`✅ Stored fareastflora payload`);
+    // }
 
 // =============================
     // 2️⃣ Store for www.xcite.com
     // =============================
-    if ((origin.includes("www.xcite.com")) && payload) {
-      const payloadCollection = db.collection('xcite');
+    // if ((origin.includes("www.xcite.com")) && payload) {
+    //   const payloadCollection = db.collection('xcite');
 
-      await payloadCollection.insertOne({
-        timestamp: new Date(),
-        origin,
-        payload,
-        unique_id,
-        url,
-        referrer,
-      });
+    //   await payloadCollection.insertOne({
+    //     timestamp: new Date(),
+    //     origin,
+    //     payload,
+    //     unique_id,
+    //     url,
+    //     referrer,
+    //   });
 
-      console.log(`✅ Stored xcite payload`);
-    }
+    //   console.log(`✅ Stored xcite payload`);
+    // }
 
 
 
@@ -411,48 +411,48 @@ app.post('/api/track-user-withoutUniDatavpn', async (req, res) => {
 
   try {
     // ✅ Check and save payload only if origin is www.mysteriumvpn.com
-  if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
-  const db = getDB();
-  const payloadCollection = db.collection('Payloads');
+//   if ((origin.includes("mysteriumvpn.com") || origin.includes("www.mysteriumvpn.com")) && payload) {
+//   const db = getDB();
+//   const payloadCollection = db.collection('Payloads');
 
-  // Optional: limit to 5000 documents
-  const count = await payloadCollection.countDocuments();
-  if (count < MAX_RECORDS) {
-    await payloadCollection.insertOne({
-      timestamp: new Date(),
-      origin,
-      payload,
-      unique_id,
-      url,
-      referrer,
-    });
-    console.log(`✅ Payload stored in MongoDB. Total records: ${count + 1}`);
-  } else {
-    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
-  }
-}
+//   // Optional: limit to 5000 documents
+//   const count = await payloadCollection.countDocuments();
+//   if (count < MAX_RECORDS) {
+//     await payloadCollection.insertOne({
+//       timestamp: new Date(),
+//       origin,
+//       payload,
+//       unique_id,
+//       url,
+//       referrer,
+//     });
+//     console.log(`✅ Payload stored in MongoDB. Total records: ${count + 1}`);
+//   } else {
+//     console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+//   }
+// }
 
 
-  if ((origin.includes("booking.theviewpalm.ae") || origin.includes("booking.theviewpalm.ae")) && payload) {
-  const db = getDB();
-  const payloadCollection = db.collection('theviewpalm');
+//   if ((origin.includes("booking.theviewpalm.ae") || origin.includes("booking.theviewpalm.ae")) && payload) {
+//   const db = getDB();
+//   const payloadCollection = db.collection('theviewpalm');
 
-  // Optional: limit to 5000 documents
-  const count = await payloadCollection.countDocuments();
-  if (count < MAX_RECORDS) {
-    await payloadCollection.insertOne({
-      timestamp: new Date(),
-      origin,
-      payload,
-      unique_id,
-      url,
-      referrer,
-    });
-    console.log(`✅ Payload theviewpalm stored in MongoDB. Total records: ${count + 1}`);
-  } else {
-    console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
-  }
-}
+//   // Optional: limit to 5000 documents
+//   const count = await payloadCollection.countDocuments();
+//   if (count < MAX_RECORDS) {
+//     await payloadCollection.insertOne({
+//       timestamp: new Date(),
+//       origin,
+//       payload,
+//       unique_id,
+//       url,
+//       referrer,
+//     });
+//     console.log(`✅ Payload theviewpalm stored in MongoDB. Total records: ${count + 1}`);
+//   } else {
+//     console.log('⚠️ Max 5000 payloads already stored. Skipping write.');
+//   }
+// }
 
 
     const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
