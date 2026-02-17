@@ -121,6 +121,7 @@
     if (isCartPage()) {
       initTracking();
     }
+    initTracking();
   });
 
 })();
